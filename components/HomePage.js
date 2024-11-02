@@ -8,76 +8,58 @@ import Banner from './HomePage/Banner';
 import Category from './HomePage/Category';
 import PopularCourse from './HomePage/PopularCourse';
 import VerticalCarousel from './HomePage/VertitcalCarousel';
+import { getAllCategory } from "../services/categoryService"
+import { Platform } from 'react-native';
+import axios from 'axios';
 const Tab = createBottomTabNavigator();
 const HomePage = () => {
     let data = {
         titleBanner: "Project Management",
         discount: "20% OFF"
     }
-    let dataCategory = [
-        {
-            topic: "Business",
-            icon: "business-outline"
-        },
-        {
-            topic: "Design",
-            icon: "color-palette-outline"
-        },
-        {
-            topic: "Development",
-            icon: "code-slash-outline"
-        },
-        {
-            topic: "Marketing",
-            icon: "megaphone-outline"
-        },
-        {
-            topic: "Photography",
-            icon: "camera-outline"
-        },
-        {
-            topic: "Music",
-            icon: "musical-notes-outline"
-        }]
+    const [dataCategory, setDataCategory] = useState([]);
 
-    let dataPopularCourse = [
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        }
-    ]
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const iosUrl = 'http://172.21.71.72:8080';
+                const androidUrl = 'http://10.0.2.2:8080';
+                const url = Platform.OS === 'ios' ? iosUrl : androidUrl;
+                console.log('Fetching categories from:', `${url}/api/category`);
+                const response = await axios.get(`${url}/api/category`);
+                setDataCategory(response.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                setError('Failed to fetch categories. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+    console.log("data fetched:", dataCategory);
+
+    const [dataPopularCourse, setdataPopularCourse] = useState([]);
+    useEffect(() => {
+        const fetchDataPopularCourse = async () => {
+            try {
+                const iosUrl = 'http://172.21.71.72:8080';
+                const androidUrl = 'http://10.0.2.2:8080';
+                const url = Platform.OS === 'ios' ? iosUrl : androidUrl;
+                console.log('Fetching courses from:', `${url}/api/course`);
+                const response = await axios.get(`${url}/api/course`);
+                setdataPopularCourse(response.data);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                setError('Failed to fetch courses. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDataPopularCourse();
+    }, []);
     let dataTopTeacher = [
         {
             title: "Christian Hayes",
