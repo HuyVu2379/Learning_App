@@ -1,0 +1,264 @@
+import React,{useState} from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { FontAwesome, AntDesign, Feather } from '@expo/vector-icons';
+
+const teacherInfo = {
+  name: 'Sara Weise',
+  role: 'UI/UX Designer',
+  description: 'Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus.',
+  benefits: [
+    '14 hours on-demand video',
+    'Native teacher',
+    '100% free document',
+    'Full lifetime access',
+    'Certificate of complete',
+    '24/7 support',
+  ],
+  price: '$59',
+  discount: '80% Disc. $73.75',
+};
+
+const similarCourses = [
+  {
+    id: '1',
+    name: 'Product Design',
+    teacher: 'Dennis Sweeney',
+    price: '$90',
+    rating: 4.5,
+    lessons: 12,
+    image:require('../assets/man.png'),
+  },
+  {
+    id: '2',
+    name: 'Palettes for Your App',
+    teacher: 'Ramono Wultschner',
+    price: '$59',
+    rating: 4.5,
+    lessons: 12,
+    image:require('../assets/man.png'),
+  },
+  {
+    id: '3',
+    name: 'Mobile UI Design',
+    teacher: 'Ramono Wultschner',
+    price: '$32',
+    rating: 4.5,
+    lessons: 12,
+    image:require('../assets/man.png'),
+  },
+];
+
+const CourseItem = ({ course }) => {
+  const [isBookmarked, setIsBookMarked] = useState(false);
+
+  const handleBookmarkPress = () => {
+    setIsBookMarked(!isBookmarked);
+  }
+  return (
+   
+  <View style={styles.courseItem}>
+    <Image source={course.image} style={styles.courseImage}/>
+    <View style={styles.courseDetails}>
+      <Text style={styles.courseName}>{course.name}</Text>
+      <Text style={styles.courseTeacher}>{course.teacher}</Text>
+      <Text style={styles.coursePrice}>{course.price}</Text>
+      <View style={styles.courseRating}>
+        <FontAwesome name="star" size={16} color="#f5c518" />
+        <Text style={styles.courseRatingText}>{course.rating}</Text>
+        <Text style={styles.courseLessons}>{`${course.lessons} lessons`}</Text>
+      </View>
+    </View>
+    <TouchableOpacity style={styles.  aveButton} onPress={handleBookmarkPress}>
+      <Feather name={isBookmarked ? "bookmark" : "bookmark"} size={24} color={isBookmarked  ? "blue" : "gray"} />
+    </TouchableOpacity>
+  </View>
+  );
+};
+
+export default function CourseScreen() {
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.teacherContainer}>
+        <Image
+          style={styles.teacherImage}
+          source={require('../assets/Rectangle.png')}
+        />
+        <View style={styles.teacherInfo}>
+          <View style={styles.textInfoTeacher}> 
+            <Text style={styles.teacherName}>{teacherInfo.name}</Text>
+            <Text style={styles.teacherRole}>{teacherInfo.role}</Text>
+          </View>
+          <TouchableOpacity style={styles.followButton}>
+            <Text style={styles.followText}>Follow</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Text style={styles.sectionTitle}>Description</Text>
+      <Text style={styles.descriptionText}>{teacherInfo.description}</Text>
+      
+      <Text style={styles.sectionTitle}>Benefits</Text>
+      {teacherInfo.benefits.map((benefit, index) => (
+        <View key={index} style={styles.benefitItem}>
+          <FontAwesome name="check-circle" size={16} color="#4caf50" />
+          <Text style={styles.benefitText}>{benefit}</Text>
+        </View>
+      ))}
+
+      <Text style={styles.sectionTitle}>Similar Courses</Text>
+      <FlatList
+        data={similarCourses}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <CourseItem course={item} />}
+        horizontal={false}
+      />
+
+      <View style={styles.priceContainer}>
+        <View>
+          <Text style={styles.priceText}>{teacherInfo.price}</Text>
+          <Text style={styles.discountText}>{teacherInfo.discount}</Text>
+        </View>
+        <TouchableOpacity style={styles.addToCartButton}>
+          <AntDesign name="shoppingcart" size={24} color="white" />
+          <Text style={styles.addToCartText}>Add to cart</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  teacherContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  teacherImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 16,
+  },
+  teacherInfo: {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+  },
+  teacherName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  teacherRole: {
+    color: '#888',
+    marginBottom: 8,
+  },
+  followButton: {
+    justifyContent:'center',
+    backgroundColor: '#C8F9FF',
+    paddingHorizontal: 20,
+    marginVertical:5,
+    borderRadius: 15,
+  },
+  followText: {
+    color: '#72BDC6',
+    fontSize: 14,
+    textAlign:'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  descriptionText: {
+    color: '#666',
+    marginBottom: 16,
+  },
+  benefitItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  benefitText: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  courseItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    padding: 8,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  courseImage: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#ddd',
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  courseDetails: {
+    flex: 1,
+  },
+  courseName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  courseTeacher: {
+    color: '#666',
+  },
+  coursePrice: {
+    fontSize: 16,
+    color: '#12C2D9',
+    marginTop: 4,
+  },
+  courseRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  courseRatingText: {
+    marginLeft: 4,
+    color: '#666',
+  },
+  courseLessons: {
+    marginLeft: 8,
+    color: '#666',
+  },
+  priceContainer: {
+    marginTop: 16,
+    alignItems: 'center',
+    flexDirection:'row',
+    justifyContent:'space-between',
+  },
+  priceText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color:'#12C2D9'
+  },
+  discountText: {
+    color: '#888',
+    marginBottom: 16,
+  },
+  addToCartButton: {
+    backgroundColor: '#00bfff',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    flexDirection:'row'
+  },
+  addToCartText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  saveButton: {
+    paddingLeft: 10,
+    alignSelf: 'flex-start',
+  },
+});
