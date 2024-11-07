@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import MyCourse from '../Course/MyCourse';
 
-const AllCourses = () => {
+const AllCourses = ({ navigation }) => {
     const DATA = [
         {
             id: '1',
@@ -29,9 +29,9 @@ const AllCourses = () => {
     ];
 
     const renderItem = ({ item }) => (
-        <View style={styles.itemContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('LearningPage')} style={styles.itemContainer}>
             <MyCourse data={item} />
-        </View>
+        </TouchableOpacity>
     );
 
     return (

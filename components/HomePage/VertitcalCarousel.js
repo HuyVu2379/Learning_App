@@ -1,15 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Course from '../Course/Course';
 
-const VerticalCarousel = ({ data }) => {
+const VerticalCarousel = ({ data, navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 {data.map((item, index) => (
-                    <View key={index}>
+                    <TouchableOpacity
+                        key={index}
+                        onPress={() => navigation.navigate('CourseDetail', { courseId: item.id, courseName: item.title })}
+                    >
                         <Course data={item} />
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
         </View>

@@ -2,8 +2,9 @@ import React from 'react';
 import { ProgressBar } from 'react-native-paper';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-const MyCourse = ({ data }) => {
+const MyCourse = ({ data = {} }) => {
     const { id, imageUrl, title = "Course Title", duration = "N/A", actualProgress = 0 } = data;
+    const progress = Math.max(0, Math.min(actualProgress, 100)) / 100;
 
     return (
         <View style={styles.container}>
@@ -19,7 +20,7 @@ const MyCourse = ({ data }) => {
                 </View>
                 <View style={styles.progress}>
                     <Text style={styles.actualProgress}>{actualProgress}% Complete</Text>
-                    <ProgressBar progress={actualProgress / 100} color="#00BDD6" style={styles.progressBar} />
+                    <ProgressBar progress={progress} color="#00BDD6" style={styles.progressBar} />
                 </View>
             </View>
         </View>
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 10,
         height: 120,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     image: {
         width: 100,

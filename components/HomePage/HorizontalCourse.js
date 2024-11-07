@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CardCourse from '../Course/CardCourse';
 import CardTeacher from '../Course/CardTeacher';
-const PopularCourse = ({ data }) => {
+const HorizontalCourse = ({ data }) => {
     return (
         <View style={styles.container}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -20,4 +20,4 @@ const styles = StyleSheet.create({
         padding: 20,
     },
 });
-export default PopularCourse;
+export default HorizontalCourse;

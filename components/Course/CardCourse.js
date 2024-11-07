@@ -11,15 +11,15 @@ const CardCourse = ({ data }) => {
         <TouchableOpacity style={styles.card}>
             <Image source={{ uri: data.imageUrl }} style={styles.image} />
             <View style={styles.content}>
-                <View >
-                    <Text style={styles.title}>{data.nameCourse}</Text>
-                    <Text style={styles.author}>{data.author}</Text>
-                    <Text style={styles.price}>${data.price}</Text>
-                    <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text> <Text style={styles.grey}>&#8226;</Text> {data.totalLesson} <Text style={styles.grey}>lessons</Text></Text>
+                <View style={styles.titleContent}>
+                    <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{data.nameCourse}</Text>
+                    <TouchableOpacity onPress={handlerBookmark}>
+                        <MaterialCommunityIcons name="bookmark-outline" size={27} color={isBookmark ? "blue" : "black"} />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handlerBookmark}>
-                    <MaterialCommunityIcons name="bookmark-outline" size={27} color={isBookmark ? "blue" : "black"} />
-                </TouchableOpacity>
+                <Text style={styles.author}>{data.author}</Text>
+                <Text style={styles.price}>${data.price}</Text>
+                <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text> <Text style={styles.grey}>&#8226;</Text> {data.totalLesson} <Text style={styles.grey}>lessons</Text></Text>
             </View>
         </TouchableOpacity>
     );
@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderWidth: 1,
         borderColor: '#E5E5E5',
+        width: 230,
+        height: 260
     },
     image: {
         width: 200,
@@ -44,13 +46,18 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     content: {
-        padding: 10,
-        flexDirection: 'row',
+        paddingVertical: 10,
         justifyContent: "space-between"
     },
+    titleContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }
+    ,
     title: {
         fontSize: 18,
         fontWeight: 'bold',
+        width: '90%'
     },
     author: {
         fontSize: 14,

@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 const Course = ({ data }) => {
     return (
-        <TouchableOpacity style={styles.card}>
+        <View style={styles.card}>
             <Image source={{ uri: data.imageUrl }} style={styles.image} />
             <View style={styles.content}>
                 <View>
@@ -14,7 +14,7 @@ const Course = ({ data }) => {
                 </View>
                 <MaterialCommunityIcons name="bookmark-outline" size={27} color="grey" />
             </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 const styles = StyleSheet.create({
@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     content: {
         padding: 10,
         flexDirection: 'row',
-        gap: 80
+        width: '76%',
+        justifyContent: 'space-between'
     },
     title: {
         fontSize: 18,

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import PopularCourse from './HomePage/PopularCourse';
+import HorizontalCourse from './HomePage/HorizontalCourse';
 const SearchPage = () => {
     const [search, setSearch] = useState('');
     const [topics, setTopics] = useState(["Java", "SQL", "Javascrip", "Python", "Digital marketing", "Photoshop", "Watercolor"]);
@@ -124,7 +124,7 @@ const SearchPage = () => {
                     <Text style={styles.header}>Recommended for you</Text>
                     <Text style={styles.viewMore}>View more</Text>
                 </View>
-                <PopularCourse data={courseRecommend} />
+                <HorizontalCourse data={courseRecommend} />
             </View>
         </ScrollView>
     );
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     topic: {
         borderWidth: 1,
         borderColor: '#00BDD6',
-        borderRadius: '50%',
+        borderRadius: 50,
         padding: 10,
         marginBottom: 5,
         marginRight: 5,

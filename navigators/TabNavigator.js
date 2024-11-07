@@ -6,6 +6,7 @@ import HomePage from '../components/HomePage';
 import MyCoursePage from '../components/MyCoursePage';
 import UserProfilePage from '../components/UserProfilePage';
 import SearchPage from '../components/SearchPage';
+import TeacherProfile from '../components/TeacherProfile';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {

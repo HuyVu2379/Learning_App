@@ -4,19 +4,18 @@ import HomePage from './components/HomePage';
 import TabNavigator from './navigators/TabNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import MyCourseNavigator from './navigators/MyCourseNavigator';
-export default function App() {
-  let data = {
-    title: "Christian Hayes",
-    certificate: "University of Havard",
-    imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U=",
-    rate: 4.5,
-    totalRate: 1233,
-  }
+import CourseDetailPage from './components/CourseDetailPage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LearningPage from './components/LearningPage'
+const Stack = createNativeStackNavigator();
+export default function App({ navigation }) {
   return (
     <NavigationContainer>
-      <View style={styles.container}>
-        <TabNavigator />
-      </View>
+      <Stack.Navigator>
+        <Stack.Screen name="BottomTab" component={TabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="CourseDetail" component={CourseDetailPage} options={{ headerShown: false }} />
+        <Stack.Screen name="LearningPage" component={LearningPage} options={{ headerShown: false }} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
