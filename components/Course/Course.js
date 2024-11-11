@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Feather from '@expo/vector-icons/Feather';
 const Course = ({ data }) => {
     return (
         <View style={styles.card}>
@@ -10,7 +11,9 @@ const Course = ({ data }) => {
                     <Text style={styles.title}>{data.title}</Text>
                     <Text style={styles.author}>{data.author}</Text>
                     <Text style={styles.price}>${data.price}</Text>
-                    <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text> <Text style={styles.grey}>&#8226;</Text> {data.totalLesson} <Text style={styles.grey}>lessons</Text></Text>
+                    <View style={styles.rate}><Feather name="star" size={20} color="#F0B749" />
+                        <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text> <Text style={styles.grey}>&#8226;</Text> {data.totalLesson} <Text style={styles.grey}>lessons</Text></Text>
+                    </View>
                 </View>
                 <MaterialCommunityIcons name="bookmark-outline" size={27} color="grey" />
             </View>
@@ -59,6 +62,10 @@ const styles = StyleSheet.create({
     },
     grey: {
         color: 'grey'
+    },
+    rate: {
+        flexDirection: 'row',
+        alignItems: 'center', gap: 10
     }
 });
 export default Course;

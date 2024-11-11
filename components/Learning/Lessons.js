@@ -87,6 +87,7 @@ const App = () => {
           data={item.lessons}
           renderItem={renderLesson}
           keyExtractor={(lesson) => lesson.id}
+          nestedScrollEnabled
         />
       )}
     </View>

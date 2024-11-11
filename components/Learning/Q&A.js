@@ -54,6 +54,7 @@ export default function App() {
         data={DATA}
         keyExtractor={(item) => item.id.toString()}
         renderItem={post}
+        nestedScrollEnabled
       />
     </View>
   );

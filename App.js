@@ -7,6 +7,7 @@ import MyCourseNavigator from './navigators/MyCourseNavigator';
 import CourseDetailPage from './components/CourseDetailPage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LearningPage from './components/LearningPage'
+import TeacherProfile from './components/TeacherProfile';
 const Stack = createNativeStackNavigator();
 export default function App({ navigation }) {
   return (
@@ -15,6 +16,7 @@ export default function App({ navigation }) {
         <Stack.Screen name="BottomTab" component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="CourseDetail" component={CourseDetailPage} options={{ headerShown: false }} />
         <Stack.Screen name="LearningPage" component={LearningPage} options={{ headerShown: false }} />
+        <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

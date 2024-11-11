@@ -8,6 +8,7 @@ import Banner from './HomePage/Banner';
 import Category from './HomePage/Category';
 import HorizontalCourse from './HomePage/HorizontalCourse';
 import VerticalCarousel from './HomePage/VertitcalCarousel';
+import HorizontalTeacher from './HomePage/HorizontalTeacher'
 import { getAllCategory } from "../services/categoryService"
 import { Platform } from 'react-native';
 import axios from 'axios';
@@ -60,6 +61,7 @@ const HomePage = ({ navigation }) => {
     // const [dataPopularCourse, setdataPopularCourse] = useState([]);
     const dataPopularCourse = [
         {
+            imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
             nameCourse: 'Introduction to Python',
             author: 'John Doe',
             price: 19.90,
@@ -68,6 +70,7 @@ const HomePage = ({ navigation }) => {
             totalLesson: 299
         },
         {
+            imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
             nameCourse: 'Advanced Python',
             author: 'Jane Smith',
             price: 19.90,
@@ -76,6 +79,7 @@ const HomePage = ({ navigation }) => {
             totalLesson: 299
         },
         {
+            imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
             nameCourse: 'JavaScrip',
             author: 'Alice Johnson',
             price: 19.90,
@@ -84,6 +88,7 @@ const HomePage = ({ navigation }) => {
             totalLesson: 299
         },
         {
+            imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
             nameCourse: 'Web Development with Django',
             author: 'Robert Brown',
             price: 19.90,
@@ -92,6 +97,7 @@ const HomePage = ({ navigation }) => {
             totalLesson: 299
         },
         {
+            imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
             nameCourse: 'Machine Learning Basics',
             author: 'Chris Davis',
             price: 19.90,
@@ -125,28 +131,58 @@ const HomePage = ({ navigation }) => {
             totalRate: 1233,
             certificate: "University of Havard",
             rate: 4.5,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://www.cvexpres.com/teaching-jobs-schools/wp-content/uploads/2023/08/job_teacher_classroom_teacher.jpg"
         },
         {
             title: "Christian Hayes",
             totalRate: 1233,
             certificate: "University of Havard",
             rate: 4.5,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://www.cvexpres.com/teaching-jobs-schools/wp-content/uploads/2023/08/job_teacher_classroom_teacher.jpg"
         },
         {
             title: "Christian Hayes",
             totalRate: 1233,
             certificate: "University of Havard",
             rate: 4.5,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://www.cvexpres.com/teaching-jobs-schools/wp-content/uploads/2023/08/job_teacher_classroom_teacher.jpg"
         },
         {
             title: "Christian Hayes",
             totalRate: 1233,
             certificate: "University of Havard",
             rate: 4.5,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://www.cvexpres.com/teaching-jobs-schools/wp-content/uploads/2023/08/job_teacher_classroom_teacher.jpg"
+        }
+    ]
+
+    let dataCourseInspires = [
+        {
+            imageUrl: 'https://www.aussietreesolutions.com.au/wp-content/uploads/2018/08/facts-about-trees-1037x675.jpg',
+            title: 'Digital Portrait',
+            author: 'Ramono Wultschener',
+            price: 67,
+            rate: 4.5,
+            totalRate: 1200,
+            totalLesson: 23
+        },
+        {
+            imageUrl: 'https://www.aussietreesolutions.com.au/wp-content/uploads/2018/08/facts-about-trees-1037x675.jpg',
+            title: 'Workspace Decord',
+            author: 'Ruth Dominguez',
+            price: 19,
+            rate: 4.5,
+            totalRate: 987,
+            totalLesson: 59
+        },
+        {
+            imageUrl: 'https://www.aussietreesolutions.com.au/wp-content/uploads/2018/08/facts-about-trees-1037x675.jpg',
+            title: 'Packing Desing',
+            author: 'Hui Anderson',
+            price: 89,
+            rate: 4.5,
+            totalRate: 675,
+            totalLesson: 14
         }
     ]
     return (
@@ -155,26 +191,33 @@ const HomePage = ({ navigation }) => {
                 <Header />
                 <Banner data={data} />
                 <Category data={dataCategory} />
-                <View style={styles.popularCoursesContainer}>
+                <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Popular Courses</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    <HorizontalCourse data={dataPopularCourse} />
+                    <HorizontalCourse navigation={navigation} data={dataPopularCourse} />
                 </View>
-                <View style={styles.verticalCarouselContainer}>
+                <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Recommended for you</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    <HorizontalCourse data={dataPopularCourse} />
+                    <HorizontalCourse navigation={navigation} data={dataPopularCourse} />
                 </View>
-                <View style={styles.topTeachersContainer}>
+                <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Course that inspires</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    <VerticalCarousel navigation={navigation} data={dataTopTeacher} />
+                    <VerticalCarousel navigation={navigation} data={dataCourseInspires} />
+                </View>
+                <View style={styles.sessionContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Top teachers</Text>
+                        <Text style={styles.viewMore}>View more</Text>
+                    </View>
+                    <HorizontalTeacher navigation={navigation} data={dataTopTeacher} />
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -182,13 +225,7 @@ const HomePage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    popularCoursesContainer: {
-        marginBottom: 20,
-    },
-    verticalCarouselContainer: {
-        marginBottom: 20,
-    },
-    topTeachersContainer: {
+    sessionContainer: {
         marginBottom: 20,
     },
     header: {
