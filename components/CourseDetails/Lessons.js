@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { AntDesign, Ionicons, Feather } from '@expo/vector-icons';
 
@@ -87,6 +88,7 @@ const App = () => {
           data={item.lessons}
           renderItem={renderLesson}
           keyExtractor={(lesson) => lesson.id}
+          nestedScrollEnabled
         />
       )}
     </View>

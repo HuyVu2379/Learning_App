@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 
@@ -84,11 +84,11 @@ export default function ReviewScreen() {
           />
         ))}
       </View>
-
       <FlatList
         data={reviews.filter((review) => selectedFilter === 'All' || review.rating === selectedFilter)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ReviewItem review={item} />}
+        nestedScrollEnabled
       />
     </View>
   );

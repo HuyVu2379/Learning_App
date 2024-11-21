@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Feather from '@expo/vector-icons/Feather';
 const CardTeacher = ({ data }) => {
     return (
-        <TouchableOpacity style={styles.card}>
+        <View style={styles.card}>
             <Image source={{ uri: data.imageUrl }} style={styles.image} />
             <View style={styles.content}>
                 <View>
                     <Text style={styles.title}>{data.title}</Text>
                     <Text style={styles.certificate}>{data.certificate}</Text>
-                    <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text></Text>
+                    <View style={styles.rate}><Feather name="star" size={20} color="#F0B749" />
+                        <Text>{data.rate} <Text style={styles.grey}>({data.totalRate})</Text></Text>
+                    </View>
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 const styles = StyleSheet.create({
@@ -49,6 +51,10 @@ const styles = StyleSheet.create({
     },
     grey: {
         color: 'grey'
+    },
+    rate: {
+        flexDirection: 'row',
+        alignItems: 'center', gap: 10
     }
 });
 export default CardTeacher;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from 'react-native';
 import { Feather, MaterialIcons, AntDesign } from '@expo/vector-icons';
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.textUpload}>Upload your project</Text>
         <TouchableOpacity style={styles.uploadButton}>
@@ -78,9 +78,10 @@ const App = () => {
           renderItem={renderResource}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
+          nestedScrollEnabled
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -128,11 +129,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5,
-    width: 150
+    width: 150,
   },
   projectImage: {
-    width: '80%',
-    height: '50%',
+    width: 20,
+    height: 20,
     borderRadius: 8,
     resizeMode: 'contain'
   },

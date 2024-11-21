@@ -9,7 +9,7 @@ const VerticalCarousel = ({ data, navigation }) => {
                 {data.map((item, index) => (
                     <TouchableOpacity
                         key={index}
-                        onPress={() => navigation.navigate('CourseDetail', { courseId: item.id, courseName: item.title })}
+                        onPress={() => navigation.navigate('CourseDetail')}
                     >
                         <Course data={item} />
                     </TouchableOpacity>

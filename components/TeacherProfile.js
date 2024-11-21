@@ -12,7 +12,7 @@ const TeacherProfile = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <AntDesign name="left" size={24} color="black" />
-                <Text>Teacher's profile</Text>
+                <Text style={styles.title}>Teacher's profile</Text>
                 <Ionicons name="ellipsis-vertical-sharp" size={24} color="black" />
             </View>
             <View style={{ alignItems: 'center' }}>
@@ -72,6 +72,19 @@ const styles = StyleSheet.create({
     location: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    header: {
+        paddingHorizontal: 10,
+        height: 50,
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
     }
 });
 

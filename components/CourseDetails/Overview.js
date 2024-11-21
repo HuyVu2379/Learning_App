@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome, AntDesign, Feather } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const teacherInfo = {
   name: 'Sara Weise',
@@ -111,6 +112,7 @@ export default function CourseScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <CourseItem course={item} />}
         horizontal={false}
+        nestedScrollEnabled
       />
 
       <View style={styles.priceContainer}>

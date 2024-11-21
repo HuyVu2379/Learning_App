@@ -9,16 +9,19 @@ import {
 } from 'react-native';
 import { FontAwesome, Feather, FontAwesome6 } from '@expo/vector-icons';
 import CourseDetailNavigator from '../navigators/CourseDetailNavigator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const CourseDetailPage = () => {
     console.log("navigation from course");
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Feather name="arrow-left" size={24} color="black" />
                 <Text style={styles.headerTitle}>Course details</Text>
-                <Feather name="bookmark" size={24} color="black" />
-                <FontAwesome6 name="ellipsis-vertical" size={24} color="black" />
+                <View style={{ flexDirection: 'row', gap: 15 }}>
+                    <Feather name="bookmark" size={24} color="black" />
+                    <FontAwesome6 name="ellipsis-vertical" size={24} color="black" />
+                </View>
             </View>
 
             <Image
@@ -37,7 +40,7 @@ const CourseDetailPage = () => {
                 </View>
             </View>
             <CourseDetailNavigator />
-        </View>
+        </SafeAreaView>
     );
 };
 
