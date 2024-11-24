@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Picker } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -8,15 +9,21 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const isFormComplete = username && email && password && confirmPassword;
+  const [open, setOpen] = useState(false);
+  const [typeUser, setTypeUser] = useState(null);
+  const [items, setItems] = useState([
+    { label: 'Student', value: 'student' },
+    { label: 'Teacher', value: 'teacher' },
+  ]);
+  const isFormComplete = username && email && password && confirmPassword && typeUser;
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    alert('Sign Up Successful!');
-    navigation.navigate('Login'); 
+    alert(`Sign Up Successful!\nUsername: ${username}\nEmail: ${email}\nType: ${typeUser}`);
+    navigation.navigate('Login');
   };
 
   return (
@@ -53,10 +60,26 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
+        <View style={styles.dropdownContainer}>
+          <DropDownPicker
+            open={open}
+            value={typeUser}
+            items={items}
+            setOpen={setOpen}
+            setValue={setTypeUser}
+            setItems={setItems}
+            style={styles.dropdown}
+            placeholder="Select User Type"
+            placeholderStyle={{ color: '#ccc' }}
+            textStyle={{ color: '#ffffff' }}
+            dropDownContainerStyle={styles.dropdownList}
+            dropDownDirection="BOTTOM"
+          />
+        </View>
         <TouchableOpacity
-          style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]} 
+          style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]}
           onPress={handleSignUp}
-          disabled={!isFormComplete} 
+          disabled={!isFormComplete}
         >
           <Text style={[styles.textBtn, isFormComplete && styles.textActive]}>Sign Up</Text>
         </TouchableOpacity>
@@ -99,6 +122,22 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
   },
+  dropdownContainer: {
+    width: '80%',
+    marginBottom: 15,
+  },
+  dropdown: {
+    backgroundColor: 'transparent',
+    borderColor: '#ffffff',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  dropdownList: {
+    fontFamily: 'Roboto',
+    fontSize:14,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: '#ffffff',
+  },
   btn: {
     borderWidth: 1,
     height: 50,
@@ -117,10 +156,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     textAlign: 'center',
-    color: '#D1D1D1', 
+    color: '#D1D1D1',
   },
   textActive: {
-    color: 'white', 
+    color: 'white',
   },
   link: {
     fontFamily: 'Roboto',
