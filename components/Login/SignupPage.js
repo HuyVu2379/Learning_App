@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Picker } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showInputs, setShowInputs] = useState(false); // Trạng thái nút toggle
 
-  const [open, setOpen] = useState(false);
-  const [typeUser, setTypeUser] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Student', value: 'student' },
-    { label: 'Teacher', value: 'teacher' },
-  ]);
-  const isFormComplete = username && email && password && confirmPassword && typeUser;
+  const isFormComplete = username && email && password && confirmPassword;
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    alert(`Sign Up Successful!\nUsername: ${username}\nEmail: ${email}\nType: ${typeUser}`);
+    alert(`Sign Up Successful!\nUsername: ${username}\nEmail: ${email}`);
     navigation.navigate('Login');
   };
 
@@ -60,22 +54,28 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
-        <View style={styles.dropdownContainer}>
-          <DropDownPicker
-            open={open}
-            value={typeUser}
-            items={items}
-            setOpen={setOpen}
-            setValue={setTypeUser}
-            setItems={setItems}
-            style={styles.dropdown}
-            placeholder="Select User Type"
-            placeholderStyle={{ color: '#ccc' }}
-            textStyle={{ color: '#ffffff' }}
-            dropDownContainerStyle={styles.dropdownList}
-            dropDownDirection="BOTTOM"
-          />
-        </View>
+        <View style={styles.checkContainer}>
+          <TouchableOpacity
+            style={[styles.checkButton, showInputs && styles.checkButtonActive]}
+            onPress={() => setShowInputs(!showInputs)}
+          >
+          {showInputs && <Text style={styles.checkMark}>✔</Text>}
+          </TouchableOpacity>
+            <Text style={styles.textCheck}>Teacher</Text>
+          </View>
+          {showInputs && (
+            <View style={styles.inputsContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Expertise"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Certificate"
+              />
+            </View>
+          )}
+        
         <TouchableOpacity
           style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]}
           onPress={handleSignUp}
@@ -83,6 +83,7 @@ export default function RegisterScreen({ navigation }) {
         >
           <Text style={[styles.textBtn, isFormComplete && styles.textActive]}>Sign Up</Text>
         </TouchableOpacity>
+
         <View style={styles.footer}>
           <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
             Already have an account? Login.
@@ -122,21 +123,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
   },
-  dropdownContainer: {
-    width: '80%',
-    marginBottom: 15,
-  },
-  dropdown: {
-    backgroundColor: 'transparent',
-    borderColor: '#ffffff',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  dropdownList: {
-    fontFamily: 'Roboto',
-    fontSize:14,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderColor: '#ffffff',
+  inputsContainer: {
+    width:'100%',
+    marginLeft:65,
+    justifyContent:'center',
+    alignContent:'center',
   },
   btn: {
     borderWidth: 1,
@@ -165,6 +156,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     marginTop: 20,
     textAlign: 'center',
+    justifyContent:'center',
     color: 'white',
   },
   footer: {
@@ -172,7 +164,34 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     width: '100%',
     position: 'absolute',
-    bottom: 20,
+    bottom: 15,
     alignSelf: 'center',
+  },
+  checkContainer:{
+    flexDirection:'row',
+    alignSelf: 'flex-end',
+    marginRight: 35,
+  },
+  checkButton: {
+    borderWidth: 1,
+    height:15,
+    width:15,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkButtonActive: {
+    backgroundColor: '#fff',
+  },
+  checkMark: {
+    color: '#4423a3',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  textCheck:{
+    marginLeft:10,
+    fontFamily: 'Roboto',
+    textAlign: 'center',
+    color: 'white',
   },
 });
