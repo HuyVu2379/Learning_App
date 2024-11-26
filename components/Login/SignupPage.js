@@ -3,12 +3,11 @@ import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity } fro
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RegisterScreen({ navigation }) {
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const isFormComplete = username && email && password && confirmPassword;
+  const isFormComplete = email && password && confirmPassword;
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {
@@ -16,7 +15,7 @@ export default function RegisterScreen({ navigation }) {
       return;
     }
     alert('Sign Up Successful!');
-    navigation.navigate('Login'); 
+    navigation.navigate('Login');
   };
 
   return (
@@ -26,12 +25,6 @@ export default function RegisterScreen({ navigation }) {
     >
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>SIGN UP</Text>
-        <TextInput
-          placeholder="Username"
-          style={styles.input}
-          value={username}
-          onChangeText={setUsername}
-        />
         <TextInput
           placeholder="Email"
           style={styles.input}
@@ -54,9 +47,9 @@ export default function RegisterScreen({ navigation }) {
           secureTextEntry
         />
         <TouchableOpacity
-          style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]} 
+          style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]}
           onPress={handleSignUp}
-          disabled={!isFormComplete} 
+          disabled={!isFormComplete}
         >
           <Text style={[styles.textBtn, isFormComplete && styles.textActive]}>Sign Up</Text>
         </TouchableOpacity>
@@ -117,10 +110,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     textAlign: 'center',
-    color: '#D1D1D1', 
+    color: '#D1D1D1',
   },
   textActive: {
-    color: 'white', 
+    color: 'white',
   },
   link: {
     fontFamily: 'Roboto',

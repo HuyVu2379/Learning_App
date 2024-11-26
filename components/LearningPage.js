@@ -7,11 +7,11 @@ import {
 import { AntDesign, Feather, Ionicons, FontAwesome6 } from "@expo/vector-icons";
 import LearningNavigator from "../navigators/LearningNavigator";
 import { SafeAreaView } from "react-native-safe-area-context";
-export default function LearningPage() {
+export default function LearningPage({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <AntDesign name="left" size={24} color="black" />
+        <AntDesign onPress={() => navigation.goBack()} name="left" size={24} color="black" />
         <Text style={styles.textTitle}>UX Foundation</Text>
         <View style={styles.headerRight}>
           <Feather name="bookmark" size={24} color="black" />

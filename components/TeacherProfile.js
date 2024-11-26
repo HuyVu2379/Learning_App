@@ -3,25 +3,32 @@ import { SafeAreaView, View, StyleSheet, Text, Image } from 'react-native';
 import TeacherProfileNavigator from '../navigators/TeacherProfileNavigator';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
-const TeacherProfile = () => {
-    const data = {
-        titleBanner: "Courses that boost your career!",
-    };
+const TeacherProfile = ({ navigation, route }) => {
+    const { user } = route.params || {}; // Lấy dữ liệu user từ route.params
+
+    // Xử lý trường hợp user không tồn tại
+    if (!user) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 16 }}>User data not available</Text>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name="left" size={24} color="black" />
+                <AntDesign onPress={() => navigation.goBack()} name="left" size={24} color="black" />
                 <Text style={styles.title}>Teacher's profile</Text>
                 <Ionicons name="ellipsis-vertical-sharp" size={24} color="black" />
             </View>
             <View style={{ alignItems: 'center' }}>
                 <Image style={styles.background} source={{ uri: 'https://dulichminhanh.com.vn/wp-content/uploads/2024/09/dai-lo-ngo-dong.jpg' }} />
-                <Image style={styles.avatar} source={{ uri: 'https://cdn.popsww.com/blog/sites/2/2021/12/naruto-sasuke.jpg' }} />
+                <Image style={styles.avatar} source={{ uri: user.avartar || 'https://example.com/default-avatar.png' }} />
             </View>
             <View style={styles.nameUser}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10 }}>Uchiha Sasuke</Text>
-                <Text style={{ fontSize: 18, color: 'grey' }}>UX/UI Designer</Text>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10 }}>{user.name}</Text>
+                <Text style={{ fontSize: 18, color: 'grey' }}>{user.certificate}</Text>
                 <View style={styles.location}>
                     <Ionicons name="location-outline" size={24} color="grey" />
                     <Text style={{ fontSize: 14, color: 'grey' }}>New York - 09:30 AM</Text>
@@ -34,10 +41,12 @@ const TeacherProfile = () => {
     );
 };
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        paddingTop: 30
     },
     bannerContainer: {
         marginBottom: 20, // Thêm khoảng cách giữa banner và navigator
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
         left: '36%',
         width: 120,
         height: 120,
-        borderRadius: '70%',
+        borderRadius: 100,
         borderWidth: 2,
         borderColor: 'white',
     },

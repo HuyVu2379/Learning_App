@@ -4,19 +4,17 @@ import {
     Text,
     Image,
     StyleSheet,
-    TouchableOpacity,
-    ImageBackground,
 } from 'react-native';
 import { FontAwesome, Feather, FontAwesome6 } from '@expo/vector-icons';
 import CourseDetailNavigator from '../navigators/CourseDetailNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
-const CourseDetailPage = () => {
+const CourseDetailPage = ({ navigation }) => {
     console.log("navigation from course");
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
-                <Feather name="arrow-left" size={24} color="black" />
+                <Feather onPress={() => navigation.goBack()} name="arrow-left" size={24} color="black" />
                 <Text style={styles.headerTitle}>Course details</Text>
                 <View style={{ flexDirection: 'row', gap: 15 }}>
                     <Feather name="bookmark" size={24} color="black" />

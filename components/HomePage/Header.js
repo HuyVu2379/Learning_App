@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Header = () => {
+const Header = ({ navigation }) => {
     return (
         <View style={styles.header}>
             <View>
@@ -10,7 +10,7 @@ const Header = () => {
                 <Text style={styles.subText}>What do you want to learn today?</Text>
             </View>
             <View style={styles.iconContainer}>
-                <TouchableOpacity style={styles.icon}>
+                <TouchableOpacity onPress={() => navigation.navigate('CartPage')} style={styles.icon}>
                     <Icon name="cart-outline" size={24} color="#fff" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.icon}>
