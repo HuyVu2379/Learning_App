@@ -6,6 +6,7 @@ export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showInputs, setShowInputs] = useState(false); // Trạng thái nút toggle
 
   const isFormComplete = email && password && confirmPassword;
 
@@ -46,6 +47,28 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
+        <View style={styles.checkContainer}>
+          <TouchableOpacity
+            style={[styles.checkButton, showInputs && styles.checkButtonActive]}
+            onPress={() => setShowInputs(!showInputs)}
+          >
+            {showInputs && <Text style={styles.checkMark}>✔</Text>}
+          </TouchableOpacity>
+          <Text style={styles.textCheck}>Teacher</Text>
+        </View>
+        {showInputs && (
+          <View style={styles.inputsContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Expertise"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Certificate"
+            />
+          </View>
+        )}
+
         <TouchableOpacity
           style={[styles.btn, isFormComplete ? styles.btnActive : styles.btnInactive]}
           onPress={handleSignUp}
@@ -53,6 +76,7 @@ export default function RegisterScreen({ navigation }) {
         >
           <Text style={[styles.textBtn, isFormComplete && styles.textActive]}>Sign Up</Text>
         </TouchableOpacity>
+
         <View style={styles.footer}>
           <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
             Already have an account? Login.
@@ -92,6 +116,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
   },
+  inputsContainer: {
+    width: '100%',
+    marginLeft: 65,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
   btn: {
     borderWidth: 1,
     height: 50,
@@ -119,6 +149,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     marginTop: 20,
     textAlign: 'center',
+    justifyContent: 'center',
     color: 'white',
   },
   footer: {
@@ -126,7 +157,34 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     width: '100%',
     position: 'absolute',
-    bottom: 20,
+    bottom: 15,
     alignSelf: 'center',
+  },
+  checkContainer: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    marginRight: 35,
+  },
+  checkButton: {
+    borderWidth: 1,
+    height: 15,
+    width: 15,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkButtonActive: {
+    backgroundColor: '#fff',
+  },
+  checkMark: {
+    color: '#4423a3',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  textCheck: {
+    marginLeft: 10,
+    fontFamily: 'Roboto',
+    textAlign: 'center',
+    color: 'white',
   },
 });
