@@ -5,22 +5,22 @@ import Banner from './HomePage/Banner';
 import Category from './HomePage/Category';
 import HorizontalCourse from './HomePage/HorizontalCourse';
 import HorizontalTeacher from './HomePage/HorizontalTeacher';
+import VerticalCarousel from './HomePage/VertitcalCarousel'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTeachers } from '../redux/slices/userSlice';
-
+import { fetchAllCategory } from '../redux/slices/categorySlice';
+import { fetchPopularCourse } from '../redux/slices/courseSlice';
 const HomePage = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { teachers, loading, error } = useSelector((state) => state.user);
-
-    const [dataCategory, setDataCategory] = useState([
-        { id: 1, name: 'Category 1' },
-        { id: 2, name: 'Category 2' },
-    ]);
-    const [dataPopularCourse, setdataPopularCourse] = useState([
-        { id: 1, title: 'Course 1', description: 'Learn course 1' },
-        { id: 2, title: 'Course 2', description: 'Learn course 2' },
-    ]);
-
+    const { teachers, loadingTeacher, errorTeacher } = useSelector((state) => state.user);
+    const { popularCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
+    const handleGetPopularCourse = async () => {
+        try {
+            await dispatch(fetchPopularCourse());
+        } catch (error) {
+            console.log('Error fetching popular course:', error);
+        }
+    };
     const handleGetAllTeacher = async () => {
         try {
             await dispatch(fetchTeachers());
@@ -28,9 +28,17 @@ const HomePage = ({ navigation }) => {
             console.log('Error fetching teachers:', error);
         }
     };
+    const { categories, loadingCategory, errorCategory } = useSelector((state) => state.category);
+
+    useEffect(() => {
+        dispatch(fetchAllCategory(6));
+    }, [dispatch]);
 
     useEffect(() => {
         handleGetAllTeacher();
+    }, []);
+    useEffect(() => {
+        handleGetPopularCourse();
     }, []);
 
     return (
@@ -38,23 +46,39 @@ const HomePage = ({ navigation }) => {
             <ScrollView>
                 <Header navigation={navigation} />
                 <Banner data={{ titleBanner: 'Project Management', discount: '20% OFF' }} />
-                <Category data={dataCategory} />
+                {loadingCategory ? (<Text>Loading...</Text>) :
+                    errorCategory ? (<Text style={{ color: 'red' }}>Error: {errorCategory}</Text>)
+                        : (<Category data={categories} />)}
                 <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Popular Courses</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    <HorizontalCourse navigation={navigation} data={dataPopularCourse} />
+                    <HorizontalCourse navigation={navigation} data={popularCourse} />
+                </View>
+                <View style={styles.sessionContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Recommended for you</Text>
+                        <Text style={styles.viewMore}>View more</Text>
+                    </View>
+                    <HorizontalCourse navigation={navigation} data={popularCourse} />
+                </View>
+                <View style={styles.sessionContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Course that inspires</Text>
+                        <Text style={styles.viewMore}>View more</Text>
+                    </View>
+                    <VerticalCarousel navigation={navigation} data={popularCourse} />
                 </View>
                 <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Top teachers</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    {loading ? (
+                    {loadingTeacher ? (
                         <Text>Loading...</Text>
-                    ) : error ? (
-                        <Text style={{ color: 'red' }}>Error: {error}</Text>
+                    ) : errorTeacher ? (
+                        <Text style={{ color: 'red' }}>Error: {errorTeacher}</Text>
                     ) : teachers?.length > 0 ? (
                         <HorizontalTeacher navigation={navigation} data={teachers} />
                     ) : (

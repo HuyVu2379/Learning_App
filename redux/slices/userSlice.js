@@ -5,8 +5,8 @@ const initialState = {
     teachers: [],
     userDetails: null,
     loggedInUser: null,
-    loading: false,
-    error: null,
+    loadingTeacher: false,
+    errorTeacher: null,
 };
 
 // Async Thunks
@@ -97,8 +97,6 @@ const userSlice = createSlice({
             })
             .addCase(fetchTeachers.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload);
-
                 state.teachers = action.payload;
             })
             .addCase(fetchTeachers.rejected, (state, action) => {

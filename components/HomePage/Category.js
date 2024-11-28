@@ -21,8 +21,11 @@ const Category = ({ data }) => {
                         <View style={styles.iconContainer}>
                             <Icon name={item.iconName} size={30} color="#fff" />
                         </View>
-                        <Text style={styles.categoryText}>{item.nameCategory}</Text>
+                        <Text style={styles.categoryText} numberOfLines={1} ellipsizeMode="tail">
+                            {item.nameCategory}
+                        </Text>
                     </TouchableOpacity>
+
                 ))}
             </View>
         </View>
@@ -70,6 +73,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
+    categoryText: {
+        fontSize: 16,
+        fontWeight: '500',
+        flex: 1, // Cho phép văn bản chiếm toàn bộ không gian còn lại
+        overflow: 'hidden', // Ẩn phần văn bản vượt quá khung
+        textOverflow: 'ellipsis', // Chỉ hỗ trợ trên web, đảm bảo fallback
+    },
+
 });
 
 export default Category;
