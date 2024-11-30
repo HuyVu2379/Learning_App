@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
 } from 'react-native';
 import { AntDesign, Ionicons, Feather } from '@expo/vector-icons';
-
-
 
 const sectionsData = [
   {
@@ -46,61 +43,52 @@ const App = () => {
 
   const toggleSection = (id) => {
     if (expandedSections.includes(id)) {
-      setExpandedSections(expandedSections.filter(sectionId => sectionId !== id));
+      setExpandedSections(expandedSections.filter((sectionId) => sectionId !== id));
     } else {
       setExpandedSections([...expandedSections, id]);
     }
   };
 
-  const renderLesson = ({ item }) => (
-    <View style={styles.lessonContainer}>
-      <View>
-        <Text>{item.id}</Text>
-      </View>
-      <View style={styles.lessonInfo}>
-        <Text style={styles.lessonTitle}>{item.title}</Text>
-        <Text style={styles.lessonDuration}>{item.duration}</Text>
-      </View>
-      <View style={styles.lessonIcon}>
-        {item.completed ? (
-          <Ionicons name="checkmark" size={24} color="blue" />
-        ) : item.playing ? (
-          <Feather name="play" size={20} color="blue" />
-        ) : (
-          <Feather name="play" size={20} color="black" />
-        )}
-      </View>
-    </View>
-  );
-
-  const renderSection = ({ item }) => (
-    <View>
-      <TouchableOpacity onPress={() => toggleSection(item.id)} style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{item.title}</Text>
-        <AntDesign
-          name={expandedSections.includes(item.id) ? 'up' : 'down'}
-          size={18}
-          color="black"
-        />
-      </TouchableOpacity>
-      {expandedSections.includes(item.id) && (
-        <FlatList
-          data={item.lessons}
-          renderItem={renderLesson}
-          keyExtractor={(lesson) => lesson.id}
-          nestedScrollEnabled
-        />
-      )}
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      <FlatList
-        data={sectionsData}
-        renderItem={renderSection}
-        keyExtractor={(section) => section.id}
-      />
+      <ScrollView>
+        {sectionsData.map((section) => (
+          <View key={section.id}>
+            <TouchableOpacity
+              onPress={() => toggleSection(section.id)}
+              style={styles.sectionHeader}
+            >
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+              <AntDesign
+                name={expandedSections.includes(section.id) ? 'up' : 'down'}
+                size={18}
+                color="black"
+              />
+            </TouchableOpacity>
+            {expandedSections.includes(section.id) &&
+              section.lessons.map((lesson) => (
+                <View key={lesson.id} style={styles.lessonContainer}>
+                  <View>
+                    <Text>{lesson.id}</Text>
+                  </View>
+                  <View style={styles.lessonInfo}>
+                    <Text style={styles.lessonTitle}>{lesson.title}</Text>
+                    <Text style={styles.lessonDuration}>{lesson.duration}</Text>
+                  </View>
+                  <View style={styles.lessonIcon}>
+                    {lesson.completed ? (
+                      <Ionicons name="checkmark" size={24} color="blue" />
+                    ) : lesson.playing ? (
+                      <Feather name="play" size={20} color="blue" />
+                    ) : (
+                      <Feather name="play" size={20} color="black" />
+                    )}
+                  </View>
+                </View>
+              ))}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };

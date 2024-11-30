@@ -6,8 +6,9 @@ module.exports = function (api) {
       [
         'module:react-native-dotenv',
         {
-          moduleName: '@env', // Tên module bạn sẽ sử dụng để import biến môi trường
-          path: '.env', // Tên file chứa biến môi trường
+          moduleName: '@env',
+          path: '.env',
+          allowUndefined: true,
         },
       ],
     ],

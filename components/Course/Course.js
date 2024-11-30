@@ -8,7 +8,7 @@ const Course = ({ data }) => {
             <Image source={{ uri: data.imageUrl }} style={styles.image} />
             <View style={styles.content}>
                 <View>
-                    <Text style={styles.title}>{data.title}</Text>
+                    <Text style={styles.title}>{data.nameCourse}</Text>
                     <Text style={styles.author}>{data.author}</Text>
                     <Text style={styles.price}>${data.price}</Text>
                     <View style={styles.rate}><Feather name="star" size={20} color="#F0B749" />

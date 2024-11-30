@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-
 
 const reviews = [
   {
@@ -61,6 +60,10 @@ export default function ReviewScreen() {
     setSelectedFilter(filter);
   };
 
+  const filteredReviews = reviews.filter(
+    (review) => selectedFilter === 'All' || review.rating === selectedFilter
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.averageRatingContainer}>
@@ -84,12 +87,12 @@ export default function ReviewScreen() {
           />
         ))}
       </View>
-      <FlatList
-        data={reviews.filter((review) => selectedFilter === 'All' || review.rating === selectedFilter)}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ReviewItem review={item} />}
-        nestedScrollEnabled
-      />
+
+      <ScrollView nestedScrollEnabled>
+        {filteredReviews.map((review) => (
+          <ReviewItem key={review.id} review={review} />
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -104,12 +107,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   averageRatingTextContainer: {
     marginLeft: 8,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   averageRating: {
     fontSize: 20,

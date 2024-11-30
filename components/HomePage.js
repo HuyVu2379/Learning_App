@@ -9,11 +9,19 @@ import VerticalCarousel from './HomePage/VertitcalCarousel'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTeachers } from '../redux/slices/userSlice';
 import { fetchAllCategory } from '../redux/slices/categorySlice';
-import { fetchPopularCourse } from '../redux/slices/courseSlice';
+import { fetchPopularCourse, fetchInspiresCourse } from '../redux/slices/courseSlice';
 const HomePage = ({ navigation }) => {
     const dispatch = useDispatch();
     const { teachers, loadingTeacher, errorTeacher } = useSelector((state) => state.user);
     const { popularCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
+    const { inspiresCourse } = useSelector((state) => state.course);
+    const handleGetInpiresCourse = async () => {
+        try {
+            await dispatch(fetchInspiresCourse({ categoryId: 2, limit: 3 }));
+        } catch (error) {
+            console.log('Error fetching popular course:', error);
+        }
+    };
     const handleGetPopularCourse = async () => {
         try {
             await dispatch(fetchPopularCourse());
@@ -36,9 +44,8 @@ const HomePage = ({ navigation }) => {
 
     useEffect(() => {
         handleGetAllTeacher();
-    }, []);
-    useEffect(() => {
         handleGetPopularCourse();
+        handleGetInpiresCourse();
     }, []);
 
     return (
@@ -68,7 +75,7 @@ const HomePage = ({ navigation }) => {
                         <Text style={styles.header}>Course that inspires</Text>
                         <Text style={styles.viewMore}>View more</Text>
                     </View>
-                    <VerticalCarousel navigation={navigation} data={popularCourse} />
+                    <VerticalCarousel navigation={navigation} data={inspiresCourse} />
                 </View>
                 <View style={styles.sessionContainer}>
                     <View style={styles.headerContainer}>

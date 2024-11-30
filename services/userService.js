@@ -1,11 +1,10 @@
 import axios from '../utils/axios';
-
-const BASE_URL = 'http://192.168.2.9:8080/api/users';
-
+import { BASE_URL } from '@env'
+const URL = BASE_URL + 'users';
 // Lấy danh sách giáo viên
 export const getAllTeacher = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/teachers`);
+        const response = await axios.get(`${URL}/teachers`);
         return response; // Trả về danh sách giáo viên
     } catch (error) {
         console.error('Error fetching teachers:', error);
@@ -15,7 +14,7 @@ export const getAllTeacher = async () => {
 
 export const findUserById = async (userId) => {
     try {
-        const response = await axios.get(`${BASE_URL}/getUserById`, {
+        const response = await axios.get(`${URL}/getUserById`, {
             params: { userId }, // Truyền userId qua query parameters
         });
         return response;
@@ -29,8 +28,10 @@ export const findUserById = async (userId) => {
 // Đăng nhập
 export const checkLogin = async ({ email, password }) => {
     try {
+        console.log(URL);
+
         // console.log('Email:', email, 'Password:', password);
-        const response = await axios.post(`${BASE_URL}/login`, { email, password });
+        const response = await axios.post(`${URL}/login`, { email, password });
         // console.log('Login response:', response);
         return response;
     } catch (error) {
