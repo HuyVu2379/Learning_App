@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import HorizontalCourse from './HomePage/HorizontalCourse';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Course from './Course/Course';
+import { fetchTopics } from '../redux/slices/topicSlice'
+import { useDispatch, useSelector } from 'react-redux';
 const SearchPage = () => {
     const [search, setSearch] = useState('');
     const [topics, setTopics] = useState(["Java", "SQL", "Javascrip", "Python", "Digital marketing", "Photoshop", "Watercolor"]);
@@ -68,6 +71,29 @@ const SearchPage = () => {
             imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
         }
     ]);
+    const dispatch = useDispatch();
+    const { courses, allTopic, loadingFilter, errorFilter } = useSelector((state) => state.topic)
+    const handleGetTopics = async () => {
+        try {
+            await dispatch(fetchTopics(3));
+        } catch (error) {
+            console.log("Error fetch topics");
+
+        }
+    }
+    useEffect(() => {
+        handleGetTopics();
+    }, []);
+    const listFilter = (data) => {
+        return (
+            <ScrollView>
+                <TouchableOpacity>
+
+                </TouchableOpacity>
+            </ScrollView>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -91,11 +117,18 @@ const SearchPage = () => {
                 <View>
                     <Text style={{ fontWeight: '600', fontSize: 20, paddingVertical: 10 }}>Hot topics</Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {
+                        {!allTopic ?
                             topics.map((topic, index) => {
                                 return (
                                     <Pressable style={styles.topic} key={index}>
                                         <Text style={{ color: '#00BDD6' }}>{topic}</Text>
+                                    </Pressable>
+                                );
+                            })
+                            : allTopic.map((topic, index) => {
+                                return (
+                                    <Pressable style={styles.topic} key={index}>
+                                        <Text style={{ color: '#00BDD6' }}>{topic.topicName}</Text>
                                     </Pressable>
                                 );
                             })

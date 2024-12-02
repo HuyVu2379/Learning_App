@@ -1,6 +1,6 @@
 import axios from '../utils/axios';
 import { BASE_URL } from '@env'
-const URL = BASE_URL + 'users';
+const URL = `${BASE_URL}users`;
 // Lấy danh sách giáo viên
 export const getAllTeacher = async () => {
     try {
@@ -30,7 +30,6 @@ export const checkLogin = async ({ email, password }) => {
     try {
         console.log(URL);
 
-        // console.log('Email:', email, 'Password:', password);
         const response = await axios.post(`${URL}/login`, { email, password });
         // console.log('Login response:', response);
         return response;
