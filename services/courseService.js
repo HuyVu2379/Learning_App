@@ -21,3 +21,12 @@ export const getInspiresCourse = async (categoryId, limit) => {
         throw new Error(error.response?.message || 'Something went wrong');
     }
 };
+export const getCourseByName = async (nameCourse) => {
+    try {
+        const response = await axios.get(`${URL}/filterCourse`, { params: { nameCourse } });
+        return response;
+    } catch (error) {
+        console.error('Error fetching inspires course:', error);
+        throw new Error(error.response?.message || 'Something went wrong');
+    }
+};

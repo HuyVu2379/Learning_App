@@ -1,11 +1,11 @@
 import axios from '../utils/axios';
 import { BASE_URL } from '@env'
-const URL = `${BASE_URL}/topic`;
+const URL = `${BASE_URL}topic`;
 
 
 export const findCourseByTopic = async (topicName) => {
     try {
-        const response = await axios.get(`${URL}/findCourse`, { params: topicName });
+        const response = await axios.get(`${URL}/findCourseByName`, { params: { topicName } });
         return response;
     } catch (error) {
         console.error('Error find course by topic:', error);

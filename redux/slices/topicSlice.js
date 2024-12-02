@@ -11,16 +11,13 @@ const initialState = {
 
 export const fetchTopics = createAsyncThunk('topic/getTopics', async (limit, { rejectWithValue }) => {
     try {
-        console.log("fetch topic: ", limit);
         const response = await getTopics(limit);
-        console.log("response:", response);
-
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.message || 'Error fetching topics');
     }
 });
-export const fetchCourseFilter = createAsyncThunk('course/getInspiresCourse', async ({ topicName }, { rejectWithValue }) => {
+export const fetchCourseFilter = createAsyncThunk('topic/findCourseByTopic', async (topicName, { rejectWithValue }) => {
     try {
         const response = await findCourseByTopic(topicName);
         return response;

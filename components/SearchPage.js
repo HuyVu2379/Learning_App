@@ -6,10 +6,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import HorizontalCourse from './HomePage/HorizontalCourse';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Course from './Course/Course';
-import { fetchTopics } from '../redux/slices/topicSlice'
+import { fetchTopics, fetchCourseFilter } from '../redux/slices/topicSlice'
 import { useDispatch, useSelector } from 'react-redux';
 const SearchPage = () => {
     const [search, setSearch] = useState('');
+    const [activeFilterSession, setActiveFilterSession] = useState(false)
     const [topics, setTopics] = useState(["Java", "SQL", "Javascrip", "Python", "Digital marketing", "Photoshop", "Watercolor"]);
     const [category, setCategory] = useState([
         {
@@ -81,19 +82,32 @@ const SearchPage = () => {
 
         }
     }
+    const handleFilterCourse = async (nameCourse) => {
+        try {
+            setActiveFilterSession(true);
+            await dispatch(fetchCourseFilter(nameCourse));
+            console.log(courses);
+
+        } catch (error) {
+            console.log("error search course");
+        }
+    }
     useEffect(() => {
         handleGetTopics();
     }, []);
-    const listFilter = (data) => {
+    const ListFilter = ({ data }) => {
         return (
             <ScrollView>
                 <TouchableOpacity>
-
+                    {data.map((item, index) => {
+                        return (
+                            <Course data={item} />
+                        )
+                    })}
                 </TouchableOpacity>
             </ScrollView>
         )
     }
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -109,58 +123,62 @@ const SearchPage = () => {
                         onChangeText={text => setSearch(text)}
                         value={search}
                     />
-                    <Pressable style={styles.filterButton}>
+                    <Pressable onPress={() => { handleFilterCourse(search) }} style={styles.filterButton}>
                         <MaterialCommunityIcons name="filter-variant" size={24} color="white" />
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Filter</Text>
                     </Pressable>
                 </View>
-                <View>
-                    <Text style={{ fontWeight: '600', fontSize: 20, paddingVertical: 10 }}>Hot topics</Text>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {!allTopic ?
-                            topics.map((topic, index) => {
-                                return (
-                                    <Pressable style={styles.topic} key={index}>
-                                        <Text style={{ color: '#00BDD6' }}>{topic}</Text>
-                                    </Pressable>
-                                );
-                            })
-                            : allTopic.map((topic, index) => {
-                                return (
-                                    <Pressable style={styles.topic} key={index}>
-                                        <Text style={{ color: '#00BDD6' }}>{topic.topicName}</Text>
-                                    </Pressable>
-                                );
-                            })
-                        }
+                {activeFilterSession ? <ListFilter data={courses} /> :
+                    <View>
+                        <View>
+                            <Text style={{ fontWeight: '600', fontSize: 20, paddingVertical: 10 }}>Hot topics</Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {!allTopic ?
+                                    topics.map((topic, index) => {
+                                        return (
+                                            <Pressable style={styles.topic} key={index}>
+                                                <Text style={{ color: '#00BDD6' }}>{topic}</Text>
+                                            </Pressable>
+                                        );
+                                    })
+                                    : allTopic.map((topic, index) => {
+                                        return (
+                                            <Pressable style={styles.topic} key={index}>
+                                                <Text style={{ color: '#00BDD6' }}>{topic.topicName}</Text>
+                                            </Pressable>
+                                        );
+                                    })
+                                }
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.headerContainer}>
+                                <Text style={styles.header}>Categories</Text>
+                                <Text style={styles.viewMore}>View more</Text>
+                            </View>
+                            {
+                                category.map((item, index) => {
+                                    return (
+                                        <Pressable style={styles.categoryBox} key={index}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                                <AntDesign name={item.iconName} size={24} color="#00BDD6" />
+                                                <Text style={{ fontSize: 18 }}>{item.categoryName}</Text>
+                                            </View>
+                                            <AntDesign name="right" size={24} color="black" />
+                                        </Pressable>
+                                    );
+                                })
+                            }
+                        </View>
+                        <View style={styles.popularCoursesContainer}>
+                            <View style={styles.headerContainer}>
+                                <Text style={styles.header}>Recommended for you</Text>
+                                <Text style={styles.viewMore}>View more</Text>
+                            </View>
+                            <HorizontalCourse data={courseRecommend} />
+                        </View>
                     </View>
-                </View>
-                <View>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.header}>Categories</Text>
-                        <Text style={styles.viewMore}>View more</Text>
-                    </View>
-                    {
-                        category.map((item, index) => {
-                            return (
-                                <Pressable style={styles.categoryBox} key={index}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                                        <AntDesign name={item.iconName} size={24} color="#00BDD6" />
-                                        <Text style={{ fontSize: 18 }}>{item.categoryName}</Text>
-                                    </View>
-                                    <AntDesign name="right" size={24} color="black" />
-                                </Pressable>
-                            );
-                        })
-                    }
-                </View>
-                <View style={styles.popularCoursesContainer}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.header}>Recommended for you</Text>
-                        <Text style={styles.viewMore}>View more</Text>
-                    </View>
-                    <HorizontalCourse data={courseRecommend} />
-                </View>
+                }
             </ScrollView>
         </SafeAreaView>
     );
