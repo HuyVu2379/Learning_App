@@ -1,10 +1,8 @@
 import axios from '../utils/axios';
-import { BASE_URL } from '@env'
+const BASE_URL = process.env.BASE_URL;
 // Lấy danh sách danh mục
 export const getAllCategory = async (limit) => {
     try {
-        console.log(BASE_URL);
-
         // Sử dụng params để gửi limit qua query string
         const response = await axios.get(`${BASE_URL}categories`, { params: { limit } });
         return response; // Trả về dữ liệu danh sách danh mục

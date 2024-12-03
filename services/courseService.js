@@ -1,6 +1,6 @@
 import axios from '../utils/axios';
-import { BASE_URL } from '@env'
-const URL = `${BASE_URL}/courses`;
+const BASE_URL = process.env.BASE_URL;
+const URL = `${BASE_URL}courses`;
 
 
 export const getPopularCourse = async () => {

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import HorizontalCourse from './HomePage/HorizontalCourse';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Course from './Course/Course';
-import { fetchTopics, fetchCourseFilter } from '../redux/slices/topicSlice'
+import { fetchTopics, fetchCourseFilter } from '../redux/slices/topicSlice';
 import { useDispatch, useSelector } from 'react-redux';
+
 const SearchPage = () => {
     const [search, setSearch] = useState('');
-    const [activeFilterSession, setActiveFilterSession] = useState(false)
+    const [activeFilterSession, setActiveFilterSession] = useState(false);
     const [topics, setTopics] = useState(["Java", "SQL", "Javascrip", "Python", "Digital marketing", "Photoshop", "Watercolor"]);
     const [category, setCategory] = useState([
         {
@@ -42,7 +43,7 @@ const SearchPage = () => {
             rate: 4.5,
             totalRate: 1233,
             totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://longvanlimousine.vn/wp-content/uploads/2024/11/thanh-pho-bien-nha-trang.jpg"
         },
         {
             title: "Christian Hayes",
@@ -51,70 +52,58 @@ const SearchPage = () => {
             rate: 4.5,
             totalRate: 1233,
             totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U="
+            imageUrl: "https://longvanlimousine.vn/wp-content/uploads/2024/11/thanh-pho-bien-nha-trang.jpg"
         }
     ]);
+
     const dispatch = useDispatch();
-    const { courses, allTopic, loadingFilter, errorFilter } = useSelector((state) => state.topic)
+    const { courses, allTopic, loadingFilter, errorFilter } = useSelector((state) => state.topic);
+
     const handleGetTopics = async () => {
         try {
             await dispatch(fetchTopics(3));
         } catch (error) {
-            console.log("Error fetch topics");
-
+            console.log("Error fetching topics", error);
         }
-    }
+    };
+
     const handleFilterCourse = async (nameCourse) => {
         try {
             setActiveFilterSession(true);
             await dispatch(fetchCourseFilter(nameCourse));
-            console.log(courses);
-
         } catch (error) {
-            console.log("error search course");
+            console.log("Error filtering courses", error);
         }
-    }
+    };
+
     useEffect(() => {
         handleGetTopics();
     }, []);
+
     const ListFilter = ({ data }) => {
         return (
-            <ScrollView>
-                <TouchableOpacity>
-                    {data.map((item, index) => {
-                        return (
-                            <Course data={item} />
-                        )
-                    })}
-                </TouchableOpacity>
-            </ScrollView>
-        )
-    }
+            <FlatList
+                data={data}
+                renderItem={({ item }) => <Course data={item} />}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: 20 }}
+            />
+        );
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.searchBar}>
                     <SearchBar
                         inputStyle={{ backgroundColor: '#F3F4F6' }}
-                        containerStyle={{ backgroundColor: 'white', borderRadius: 5, flex: 1, borderBottomWidth: 0, borderTopWidth: 0 }}
+                        containerStyle={{
+                            backgroundColor: 'white',
+                            borderRadius: 5,
+                            flex: 1,
+                            borderBottomWidth: 0,
+                            borderTopWidth: 0
+                        }}
                         inputContainerStyle={{
                             backgroundColor: '#F3F4F6',
                         }}
@@ -123,32 +112,34 @@ const SearchPage = () => {
                         onChangeText={text => setSearch(text)}
                         value={search}
                     />
-                    <Pressable onPress={() => { handleFilterCourse(search) }} style={styles.filterButton}>
+                    <Pressable
+                        onPress={() => { handleFilterCourse(search); }}
+                        disabled={!search.trim()}
+                        style={[
+                            styles.filterButton,
+                            { backgroundColor: search.trim() ? '#00BDD6' : '#B0B0B0' },
+                        ]}
+                    >
                         <MaterialCommunityIcons name="filter-variant" size={24} color="white" />
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Filter</Text>
                     </Pressable>
                 </View>
-                {activeFilterSession ? <ListFilter data={courses} /> :
+                {activeFilterSession ? (
+                    courses ? (
+                        <ListFilter data={courses} />
+                    ) : (
+                        <Text>Course not found</Text>
+                    )
+                ) : (
                     <View>
                         <View>
                             <Text style={{ fontWeight: '600', fontSize: 20, paddingVertical: 10 }}>Hot topics</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {!allTopic ?
-                                    topics.map((topic, index) => {
-                                        return (
-                                            <Pressable style={styles.topic} key={index}>
-                                                <Text style={{ color: '#00BDD6' }}>{topic}</Text>
-                                            </Pressable>
-                                        );
-                                    })
-                                    : allTopic.map((topic, index) => {
-                                        return (
-                                            <Pressable style={styles.topic} key={index}>
-                                                <Text style={{ color: '#00BDD6' }}>{topic.topicName}</Text>
-                                            </Pressable>
-                                        );
-                                    })
-                                }
+                                {(allTopic && allTopic.length > 0 ? allTopic : topics).map((topic, index) => (
+                                    <Pressable style={styles.topic} key={index}>
+                                        <Text style={{ color: '#00BDD6' }}>{topic.topicName || topic}</Text>
+                                    </Pressable>
+                                ))}
                             </View>
                         </View>
                         <View>
@@ -156,19 +147,15 @@ const SearchPage = () => {
                                 <Text style={styles.header}>Categories</Text>
                                 <Text style={styles.viewMore}>View more</Text>
                             </View>
-                            {
-                                category.map((item, index) => {
-                                    return (
-                                        <Pressable style={styles.categoryBox} key={index}>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                                                <AntDesign name={item.iconName} size={24} color="#00BDD6" />
-                                                <Text style={{ fontSize: 18 }}>{item.categoryName}</Text>
-                                            </View>
-                                            <AntDesign name="right" size={24} color="black" />
-                                        </Pressable>
-                                    );
-                                })
-                            }
+                            {category.map((item, index) => (
+                                <Pressable style={styles.categoryBox} key={index}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                        <AntDesign name={item.iconName} size={24} color="#00BDD6" />
+                                        <Text style={{ fontSize: 18 }}>{item.categoryName}</Text>
+                                    </View>
+                                    <AntDesign name="right" size={24} color="black" />
+                                </Pressable>
+                            ))}
                         </View>
                         <View style={styles.popularCoursesContainer}>
                             <View style={styles.headerContainer}>
@@ -178,7 +165,7 @@ const SearchPage = () => {
                             <HorizontalCourse data={courseRecommend} />
                         </View>
                     </View>
-                }
+                )}
             </ScrollView>
         </SafeAreaView>
     );
@@ -196,7 +183,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     filterButton: {
-        backgroundColor: '#00BDD6',
         padding: 10,
         borderRadius: 5,
         flexDirection: 'row',
