@@ -1,5 +1,5 @@
 import axios from '../utils/axios';
-const BASE_URL = process.env.BASE_URL;
+import { BASE_URL } from '@env';
 const URL = `${BASE_URL}courses`;
 
 

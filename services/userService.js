@@ -1,5 +1,5 @@
 import axios from '../utils/axios';
-const BASE_URL = process.env.BASE_URL;
+import { BASE_URL } from '@env';
 const URL = `${BASE_URL}users`;
 // Lấy danh sách giáo viên
 export const getAllTeacher = async () => {
@@ -28,6 +28,8 @@ export const findUserById = async (userId) => {
 // Đăng nhập
 export const checkLogin = async ({ email, password }) => {
     try {
+        console.log(URL);
+
         const response = await axios.post(`${URL}/login`, { email, password });
         // console.log('Login response:', response);
         return response;

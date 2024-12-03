@@ -1,5 +1,5 @@
 import axios from '../utils/axios';
-const BASE_URL = process.env.BASE_URL;
+import { BASE_URL } from '@env';
 // Lấy danh sách danh mục
 export const getAllCategory = async (limit) => {
     try {

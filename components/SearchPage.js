@@ -82,12 +82,15 @@ const SearchPage = () => {
 
     const ListFilter = ({ data }) => {
         return (
-            <FlatList
-                data={data}
-                renderItem={({ item }) => <Course data={item} />}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={{ paddingBottom: 20 }}
-            />
+            <View>
+                {data.map((item, index) => {
+                    return (
+                        <View key={index}>
+                            <Course data={item} />
+                        </View>
+                    )
+                })}
+            </View>
         );
     };
 
@@ -102,16 +105,17 @@ const SearchPage = () => {
                             borderRadius: 5,
                             flex: 1,
                             borderBottomWidth: 0,
-                            borderTopWidth: 0
+                            borderTopWidth: 0,
                         }}
                         inputContainerStyle={{
                             backgroundColor: '#F3F4F6',
                         }}
+                        placeholder="Search Course"
                         lightTheme
-                        placeholder='Search Course'
-                        onChangeText={text => setSearch(text)}
+                        onChangeText={(text) => setSearch(text)}
                         value={search}
                     />
+
                     <Pressable
                         onPress={() => { handleFilterCourse(search); }}
                         disabled={!search.trim()}
@@ -136,7 +140,7 @@ const SearchPage = () => {
                             <Text style={{ fontWeight: '600', fontSize: 20, paddingVertical: 10 }}>Hot topics</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                                 {(allTopic && allTopic.length > 0 ? allTopic : topics).map((topic, index) => (
-                                    <Pressable style={styles.topic} key={index}>
+                                    <Pressable onPress={() => { handleFilterCourse(topic.topicName) }} style={styles.topic} key={index}>
                                         <Text style={{ color: '#00BDD6' }}>{topic.topicName || topic}</Text>
                                     </Pressable>
                                 ))}
