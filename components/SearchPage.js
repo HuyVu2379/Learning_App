@@ -8,11 +8,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Course from './Course/Course';
 import { fetchTopics, fetchCourseFilter } from '../redux/slices/topicSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchPopularCourse, fetchRecommendCourse } from '../redux/slices/courseSlice';
 
-const SearchPage = () => {
+const SearchPage = ({navigation}) => {
     const [search, setSearch] = useState('');
     const [activeFilterSession, setActiveFilterSession] = useState(false);
     const [topics, setTopics] = useState(["Java", "SQL", "Javascrip", "Python", "Digital marketing", "Photoshop", "Watercolor"]);
+    const { popularCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
     const [category, setCategory] = useState([
         {
             categoryName: "Business",
@@ -35,29 +37,17 @@ const SearchPage = () => {
             iconName: "earth"
         }
     ]);
-    const [courseRecommend, setCourseRecommend] = useState([
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://longvanlimousine.vn/wp-content/uploads/2024/11/thanh-pho-bien-nha-trang.jpg"
-        },
-        {
-            title: "Christian Hayes",
-            author: "University of Havard",
-            price: 20,
-            rate: 4.5,
-            totalRate: 1233,
-            totalLesson: 12,
-            imageUrl: "https://longvanlimousine.vn/wp-content/uploads/2024/11/thanh-pho-bien-nha-trang.jpg"
-        }
-    ]);
 
     const dispatch = useDispatch();
     const { courses, allTopic, loadingFilter, errorFilter } = useSelector((state) => state.topic);
+
+    const handleGetCourseRecommendYou = async () => {
+        try{
+            await dispatch(fetchPopularCourse())
+        } catch(error) {    
+            console.log("Error get courses", error);
+        }
+    };
 
     const handleGetTopics = async () => {
         try {
@@ -78,22 +68,8 @@ const SearchPage = () => {
 
     useEffect(() => {
         handleGetTopics();
+        handleGetCourseRecommendYou();
     }, []);
-
-    const ListFilter = ({ data }) => {
-        return (
-            <View>
-                {data.map((item, index) => {
-                    return (
-                        <View key={index}>
-                            <Course data={item} />
-                        </View>
-                    )
-                })}
-            </View>
-        );
-    };
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -166,7 +142,7 @@ const SearchPage = () => {
                                 <Text style={styles.header}>Recommended for you</Text>
                                 <Text style={styles.viewMore}>View more</Text>
                             </View>
-                            <HorizontalCourse data={courseRecommend} />
+                            <HorizontalCourse data={popularCourse} navigation={navigation} />
                         </View>
                     </View>
                 )}

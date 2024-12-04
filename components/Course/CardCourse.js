@@ -6,7 +6,7 @@ const CardCourse = ({ data }) => {
     const [isBookmark, setIsBookmark] = useState(false);
 
     const handlerBookmark = () => {
-        setIsBookmark(true);
+        setIsBookmark(!isBookmark);
     }
     return (
         <View style={styles.card}>

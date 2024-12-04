@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getPopularCourse, getInspiresCourse, getCourseByName, saveCourse, findCourseByPK } from '../../services/courseService';
+import { getPopularCourse, getInspiresCourse, getCourseByName, saveCourse, findCourseByPK, getRecommendCourse } from '../../services/courseService';
 
 const initialState = {
     popularCourse: [],
@@ -76,7 +76,6 @@ const courseSlice = createSlice({
                 state.loadingCourse = false;
                 state.errorCourse = action.payload; // Set error message
             })
-
             // Fetch inspires course
             .addCase(fetchInspiresCourse.pending, (state) => {
                 state.loadingCourse = true;
