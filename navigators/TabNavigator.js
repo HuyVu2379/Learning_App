@@ -6,10 +6,11 @@ import HomePage from '../components/HomePage';
 import MyCoursePage from '../components/MyCoursePage';
 import UserProfilePage from '../components/UserProfilePage';
 import SearchPage from '../components/SearchPage';
-import TeacherProfile from '../components/TeacherProfile';
+import { useSelector } from 'react-redux';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+    const loggedInUser = useSelector((state) => state.user.loggedInUser);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -38,6 +39,7 @@ const TabNavigator = () => {
                 options={{ headerShown: false }}
                 name="Home"
                 component={HomePage}
+                initialParams={{ loggedInUser }}
             />
             <Tab.Screen
                 options={{ headerShown: false }}

@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import CardTeacher from '../Course/CardTeacher';
-import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserById } from '../../redux/slices/userSlice';
 const HorizontalTeacher = ({ navigation, data }) => {
-    const dispatch = useDispatch();
-    const { userDetails, loading, error } = useSelector((state) => state.user);
     const handleGetTeacherDetails = async (userId) => {
         try {
             const result = await dispatch(fetchUserById(userId)).unwrap(); // Lấy dữ liệu trả về trực tiếp

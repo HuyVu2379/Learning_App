@@ -29,8 +29,11 @@ export default function LoginScreen({ navigation }) {
     try {
       const result = await dispatch(performLogin({ email: username, password }));
       if (result.meta.requestStatus === 'fulfilled') {
-        // Nếu đăng nhập thành công, điều hướng người dùng
-        navigation.navigate('BottomTab');
+        // Lấy dữ liệu người dùng từ kết quả trả về
+        const loggedInUser = result.payload;
+
+        // Nếu đăng nhập thành công, điều hướng người dùng và truyền loggedInUser
+        navigation.navigate('BottomTab', { loggedInUser });
       } else {
         // Hiển thị thông báo lỗi
         Alert.alert('Login Failed', result.payload || 'Invalid credentials');
@@ -40,6 +43,7 @@ export default function LoginScreen({ navigation }) {
       Alert.alert('Error', 'An error occurred during login.');
     }
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>

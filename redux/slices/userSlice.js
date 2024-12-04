@@ -4,7 +4,7 @@ import { getAllTeacher, findUserById, checkLogin } from '../../services/userServ
 const initialState = {
     teachers: [],
     userDetails: null,
-    loggedInUser: null,
+    loggedInUser: {},
     loadingTeacher: false,
     errorTeacher: null,
 };
@@ -19,7 +19,7 @@ export const performLogin = createAsyncThunk(
                 // Nếu có lỗi, trả về thông báo lỗi
                 return rejectWithValue(response.message || 'Invalid credentials');
             }
-            return response.data; // Trả về dữ liệu người dùng nếu đăng nhập thành công
+            return response.user; // Trả về dữ liệu người dùng nếu đăng nhập thành công
         } catch (error) {
             // Xử lý lỗi khi gọi API
             console.error('Login error:', error);
@@ -70,6 +70,7 @@ const userSlice = createSlice({
             .addCase(performLogin.fulfilled, (state, action) => {
                 state.loading = false;
                 state.loggedInUser = action.payload;
+
             })
             .addCase(performLogin.rejected, (state, action) => {
                 state.loading = false;

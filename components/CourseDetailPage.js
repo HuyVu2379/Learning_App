@@ -4,37 +4,51 @@ import {
     Text,
     Image,
     StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
 import { FontAwesome, Feather, FontAwesome6 } from '@expo/vector-icons';
 import CourseDetailNavigator from '../navigators/CourseDetailNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+
 const CourseDetailPage = ({ navigation }) => {
-    console.log("navigation from course");
+    const { courseDetail } = useSelector((state) => state.course);
+    const course = courseDetail;
+
+    // Nếu dữ liệu courseDetail chưa được tải, hiển thị vòng xoay chờ
+    if (!course) {
+        return (
+            <SafeAreaView style={styles.centered}>
+                <ActivityIndicator size="large" color="#000" />
+                <Text>Loading course details...</Text>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Feather onPress={() => navigation.goBack()} name="arrow-left" size={24} color="black" />
                 <Text style={styles.headerTitle}>Course details</Text>
-                <View style={{ flexDirection: 'row', gap: 15 }}>
+                <View style={styles.headerActions}>
                     <Feather name="bookmark" size={24} color="black" />
                     <FontAwesome6 name="ellipsis-vertical" size={24} color="black" />
                 </View>
             </View>
 
             <Image
-                source={require('../assets/image/black-man-reading-book-removebg-preview.png')}
+                source={{ uri: course.imageUrl }}
                 style={styles.banner}
-                resizeMode="contain"
+                resizeMode="cover"
             />
             <View style={styles.courseDetailsContainer}>
                 <Text style={styles.courseSubtitle}>
-                    UX Foundation: Introduction to User Experience Design
+                    {course.nameCourse}
                 </Text>
                 <View style={styles.courseStats}>
                     <FontAwesome name="star" size={16} color="#f5c518" />
-                    <Text style={styles.courseRating}>4.5 (1233)</Text>
-                    <Text style={styles.courseLessons}>• 12 lessons</Text>
+                    <Text style={styles.courseRating}>{course.rate} ({course.totalRate})</Text>
+                    <Text style={styles.courseLessons}>• {course.totalLesson} lessons</Text>
                 </View>
             </View>
             <CourseDetailNavigator />
@@ -45,6 +59,12 @@ const CourseDetailPage = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
+    },
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#fff',
     },
     headerContainer: {
@@ -59,16 +79,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    headerActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     banner: {
         height: 200,
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '100%',
     },
     courseDetailsContainer: {
         padding: 16,
     },
     courseSubtitle: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
     },

@@ -29,9 +29,7 @@ export const findUserById = async (userId) => {
 export const checkLogin = async ({ email, password }) => {
     try {
         console.log(URL);
-
         const response = await axios.post(`${URL}/login`, { email, password });
-        // console.log('Login response:', response);
         return response;
     } catch (error) {
         console.error('Login error:', error);

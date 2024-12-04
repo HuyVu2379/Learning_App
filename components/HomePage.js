@@ -15,6 +15,8 @@ const HomePage = ({ navigation }) => {
     const { teachers, loadingTeacher, errorTeacher } = useSelector((state) => state.user);
     const { popularCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
     const { inspiresCourse } = useSelector((state) => state.course);
+
+
     const handleGetInpiresCourse = async () => {
         try {
             await dispatch(fetchInspiresCourse({ categoryId: 2, limit: 3 }));

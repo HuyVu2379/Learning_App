@@ -30,3 +30,22 @@ export const getCourseByName = async (nameCourse) => {
         throw new Error(error.response?.message || 'Something went wrong');
     }
 };
+export const findCourseByPK = async (courseId) => {
+    try {
+        const response = await axios.get(`${URL}/findCourseById`, { params: { courseId } });
+        return response;
+    } catch (error) {
+        console.error('Error find course:', error);
+        throw new Error(error.response?.message || 'Something went wrong');
+    }
+};
+export const saveCourse = async (courseId, userId) => {
+    try {
+        const response = await axios.post(`${URL}/save`, { courseId, userId });
+        return response;
+    } catch (error) {
+        console.error('Error save course:', error);
+        throw new Error(error.response?.message || 'Something went wrong');
+    }
+};
+

@@ -3,7 +3,10 @@ import React from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 import Course from './Course/Course';
 import VerticalCarousel from './HomePage/VertitcalCarousel';
+import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch
 const UserProfilePage = ({ navigation }) => {
+    const { loggedInUser } = useSelector((state) => state.user);
+    const user = loggedInUser
     let dataSaveCourses = [
         {
             title: "Christian Hayes",
@@ -51,11 +54,11 @@ const UserProfilePage = ({ navigation }) => {
                 </View>
                 <View style={{ alignItems: 'center' }}>
                     <Image style={styles.background} source={{ uri: 'https://dulichminhanh.com.vn/wp-content/uploads/2024/09/dai-lo-ngo-dong.jpg' }} />
-                    <Image style={styles.avatar} source={{ uri: 'https://cdn.popsww.com/blog/sites/2/2021/12/naruto-sasuke.jpg' }} />
+                    <Image style={styles.avatar} source={{ uri: user.avartar }} />
                 </View>
                 <View style={styles.nameUser}>
-                    <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10 }}>Uchiha Sasuke</Text>
-                    <Text style={{ fontSize: 18, color: 'grey' }}>UX/UI Designer</Text>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10 }}>{user.name}</Text>
+                    <Text style={{ fontSize: 18, color: 'grey' }}>{user.certificate}</Text>
                 </View>
                 <View style={styles.allCourse}>
                     <View style={styles.courses}>
