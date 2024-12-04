@@ -55,8 +55,8 @@ const CourseItem = ({ course }) => {
   const handleBookmarkPress = () => {
     setIsBookMarked(!isBookmarked);
   }
-  return (
 
+  return (
     <View style={styles.courseItem}>
       <Image source={course.image} style={styles.courseImage} />
       <View style={styles.courseDetails}>
@@ -93,6 +93,11 @@ export default function CourseScreen() {
       alert('Failed to add course to cart: ' + error);
     }
   };
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const toggleFollow = () => {
+    setIsFollowing(!isFollowing);
+  }
   return (
     <ScrollView style={styles.container}>
       <View style={styles.teacherContainer}>
@@ -105,8 +110,8 @@ export default function CourseScreen() {
             <Text style={styles.teacherName}>{teacherInfo.name}</Text>
             <Text style={styles.teacherRole}>{teacherInfo.role}</Text>
           </View>
-          <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.followText}>Follow</Text>
+          <TouchableOpacity style={[styles.followButton, { backgroundColor: isFollowing ? 'red' : '#ADD8E6' }]} onPress={toggleFollow}>
+            <Text style={[styles.followText, { color: isFollowing ? 'black' : '#72BDC6' }]}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -180,7 +185,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   followText: {
-    color: '#72BDC6',
     fontSize: 14,
     textAlign: 'center',
   },
