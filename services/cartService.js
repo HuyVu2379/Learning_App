@@ -29,3 +29,21 @@ export const getAllCourseFromCart = async (cartId) => {
         throw new Error(error.response?.data || 'Something went wrong');
     }
 };
+export const removeCourseInCart = async (cartId, courseId) => {
+    try {
+        console.log("check data in cartService: ", cartId, courseId);
+
+        // Truyền dữ liệu qua URL params
+        const response = await axios.delete(`${URL}/removeFromCart`, {
+            params: { cartId, courseId }, // Truyền cartId và courseId qua URL
+        });
+
+        console.log("check response: ", response);
+
+        return response;
+    } catch (error) {
+        console.error('Error delete Course from cart:', error);
+        throw new Error(error.response?.data || 'Something went wrong');
+    }
+};
+

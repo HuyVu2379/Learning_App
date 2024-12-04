@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCartByUserId, addCourseToCart as addCourseToCartService, getAllCourseFromCart } from '../../services/cartService';
+import { getCartByUserId, addCourseToCart as addCourseToCartService, getAllCourseFromCart, removeCourseInCart } from '../../services/cartService';
 
 const initialState = {
     userCart: {},
@@ -45,6 +45,20 @@ export const handleGetAllCourseInCart = createAsyncThunk(
         }
     }
 );
+export const handleRemoveCourseInCart = createAsyncThunk(
+    'cart/handleRemoveCourseInCart',
+    async ({ cartId, courseId }, { rejectWithValue }) => {
+        try {
+            console.log("check data in cartSlice:", cartId, courseId);
+
+            const response = await removeCourseInCart(cartId, courseId);
+            // Process response if needed
+            return response;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || 'Error delete course in cart');
+        }
+    }
+);
 
 
 // Slice
@@ -62,7 +76,6 @@ const cartSlice = createSlice({
             .addCase(getCartByUser.fulfilled, (state, action) => {
                 state.loadingCart = false;
                 state.userCart = action.payload;
-
             })
             .addCase(getCartByUser.rejected, (state, action) => {
                 state.loadingCart = false;
@@ -82,6 +95,20 @@ const cartSlice = createSlice({
                 state.loadingCart = false;
                 state.errorCart = action.payload;
             })
+            // Xóa course khỏi cart
+            .addCase(handleRemoveCourseInCart.pending, (state) => {
+                state.loadingCart = true;
+                state.errorCart = null; // Xóa lỗi trước đó
+            })
+            .addCase(handleRemoveCourseInCart.fulfilled, (state, action) => {
+                state.loadingCart = false;
+                // Xóa course khỏi listCourse dựa trên courseId
+                state.listCourse = state.listCourse.filter(course => course.id !== action.payload.courseId);
+            })
+            .addCase(handleRemoveCourseInCart.rejected, (state, action) => {
+                state.loadingCart = false;
+                state.errorCart = action.payload;
+            })
             // Lấy toàn bộ course
             .addCase(handleGetAllCourseInCart.pending, (state) => {
                 state.loadingCart = true;
@@ -89,14 +116,13 @@ const cartSlice = createSlice({
             })
             .addCase(handleGetAllCourseInCart.fulfilled, (state, action) => {
                 state.loadingCart = false;
-                // Thêm course mới vào listCourse
+                // Cập nhật listCourse với các course mới
                 state.listCourse = action.payload;
             })
             .addCase(handleGetAllCourseInCart.rejected, (state, action) => {
                 state.loadingCart = false;
                 state.errorCart = action.payload;
-            })
-            ;
+            });
     },
 });
 

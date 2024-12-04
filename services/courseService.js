@@ -49,3 +49,24 @@ export const saveCourse = async (courseId, userId) => {
         throw new Error(error.response?.message || 'Something went wrong');
     }
 };
+export const registerCourse = async (courseId, userId) => {
+    try {
+        const response = await axios.post(`${URL}/register`, { courseId, userId });
+        return response;
+    } catch (error) {
+        console.error('Error register course:', error);
+        throw new Error(error.response?.message || 'Something went wrong');
+    }
+};
+export const getMyCourses = async (userId) => {
+    try {
+        console.log("userId from courseService: ", userId);
+        const response = await axios.get(`${URL}/getAllMyCourse`, {
+            params: { userId }, // Truyền userId vào query string
+        });
+        return response;
+    } catch (error) {
+        console.error('Error get My course:', error);
+        throw new Error(error.response?.data?.message || error.message || 'Something went wrong');
+    }
+};

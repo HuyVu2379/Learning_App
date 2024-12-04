@@ -2,38 +2,71 @@ import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Course from './Course/Course';
-import { CheckBox } from '@rneui/themed';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Button } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-import { handleGetAllCourseInCart } from "../redux/slices/cartSlice"
+import { handleGetAllCourseInCart, handleRemoveCourseInCart } from "../redux/slices/cartSlice";
+import { handleRegisterCourse } from "../redux/slices/courseSlice"; // Import registerCourse action
+
 function CartPage({ navigation }) {
-    const dispatch = useDispatch()
-    const [isSelected, setSelection] = useState(false);
-    const [isModalVisible, setModalVisible] = useState(false); // Trạng thái modal
-    const { listCourse } = useSelector((state) => state.cart)
-    const { userCart } = useSelector((state) => state.cart)
+    const dispatch = useDispatch();
+    const [isModalVisible, setModalVisible] = useState(false);
+    const { listCourse } = useSelector((state) => state.cart);
+    const { userCart } = useSelector((state) => state.cart);
+    const { loggedInUser } = useSelector((state) => state.user); // Assume you have user info in the store
+
+    // Tổng giá trị ban đầu
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const handleFetchAllCourse = async () => {
         try {
-            await dispatch(handleGetAllCourseInCart(userCart.cartId))
+            await dispatch(handleGetAllCourseInCart(userCart.cartId));
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
     useEffect(() => {
         handleFetchAllCourse();
-    }, [dispatch])
+    }, [dispatch]);
+
+    // Tính toán lại totalPrice khi danh sách khóa học thay đổi
+    useEffect(() => {
+        let total = 0;
+        listCourse?.forEach(cartItem => {
+            cartItem.courses?.forEach(course => {
+                total += course.price; // Cộng giá của khóa học vào tổng giá trị
+            });
+        });
+        setTotalPrice(total); // Cập nhật totalPrice
+    }, [listCourse]); // Khi danh sách khóa học thay đổi, tính lại totalPrice
+
+    // Xóa khóa học khỏi giỏ hàng
+    const handleRemoveCourse = (courseId) => {
+        dispatch(handleRemoveCourseInCart({ cartId: userCart.cartId, courseId })); // Gọi action xóa khóa học
+        handleFetchAllCourse();
+    };
+
+    // Register all courses in the cart when user clicks "Thanh toán"
+    const handleCheckout = async () => {
+        try {
+            // Iterate over the courses in the cart and register each one
+            for (const cartItem of listCourse) {
+                for (const course of cartItem.courses) {
+                    await dispatch(handleRegisterCourse({ courseId: course.courseId, userId: loggedInUser.userId })); // Register course
+                    handleRemoveCourse(course.courseId)
+                }
+            }
+
+        } catch (error) {
+            console.log("Error during course registration:", error);
+        }
+    };
+
     const ItemCart = ({ data }) => {
         return (
             <View style={styles.courseBox}>
                 <View style={styles.courseContent}>
-                    <View style={styles.checkBox}>
-                        <CheckBox
-                            checked={isSelected}
-                            onPress={() => setSelection(!isSelected)}
-                        />
-                    </View>
                     <Course data={data} />
                 </View>
                 <TouchableOpacity
@@ -42,21 +75,20 @@ function CartPage({ navigation }) {
                 >
                     <Text>Voucher giảm giá</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.removeButton}
+                    onPress={() => handleRemoveCourse(data.courseId)} // Xóa khóa học khi nhấn nút
+                >
+                    <Text style={styles.removeText}>Xóa</Text>
+                </TouchableOpacity>
             </View>
-        )
-    }
-    const data = {
-        imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
-        title: 'Introduction to Python',
-        author: 'John Doe',
-        price: 19.90,
-        rate: 4.5,
-        totalRate: 199,
-        totalLesson: 299
+        );
     };
+
     const dataDiscount = {
         imageUrl: 'https://www.softwebsolutions.com/wp-content/uploads/2021/08/React-Native.png',
-    }
+    };
+
     const DiscountItem = ({ data }) => {
         return (
             <View style={styles.discountItemBox}>
@@ -70,8 +102,9 @@ function CartPage({ navigation }) {
                     <Text>NHH: 1/1/2024</Text>
                 </View>
             </View>
-        )
-    }
+        );
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -94,13 +127,13 @@ function CartPage({ navigation }) {
                 }
             </ScrollView>
 
-
             <View style={styles.totalPriceBox}>
-                <Text style={styles.totalText}>Tổng cộng: 500,000 VND</Text>
-                <TouchableOpacity style={styles.checkoutButton}>
+                <Text style={styles.totalText}>Tổng cộng: {totalPrice.toLocaleString()} VND</Text>
+                <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
                     <Text style={styles.checkoutText}>Thanh toán</Text>
                 </TouchableOpacity>
             </View>
+
             <Modal
                 transparent={true}
                 visible={isModalVisible}
@@ -141,12 +174,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     courseContainer: {
-        flex: 1, // Chiếm toàn bộ không gian bên trên footer,
-        marginBottom: 70
-    },
-    checkBox: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        flex: 1,
+        marginBottom: 80
     },
     courseBox: {
         marginTop: 10,
@@ -160,6 +189,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    removeButton: {
+        backgroundColor: '#ff6f61',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    removeText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
     discountBox: {
         borderWidth: 1,
@@ -189,49 +230,48 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         backgroundColor: 'white',
-        borderTopWidth: 1,
-        borderColor: '#ddd',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
+        padding: 10,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     totalText: {
-        fontSize: 16,
         fontWeight: 'bold',
+        fontSize: 18,
     },
     checkoutButton: {
-        backgroundColor: '#ff6f61',
-        paddingHorizontal: 20,
+        marginTop: 10,
         paddingVertical: 10,
+        paddingHorizontal: 40,
+        backgroundColor: '#3c7f8c',
         borderRadius: 5,
     },
     checkoutText: {
         color: 'white',
         fontWeight: 'bold',
-    },
-    buttonAcceptDiscount: {
+        fontSize: 18,
     },
     discountItemBox: {
-        width: '100%',
         flexDirection: 'row',
         padding: 10,
+        marginBottom: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 5,
-        gap: 10
+        borderColor: 'grey',
     },
     imageDiscount: {
-        height: 100,
-        width: 100,
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 5
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+        marginRight: 10,
     },
     discountDetails: {
-        justifyContent: 'space-between'
-    }
+        flex: 1,
+        justifyContent: 'center',
+    },
+    buttonAcceptDiscount: {
+        marginTop: 20,
+    },
 });
 
 export default CartPage;
