@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import CardTeacher from '../Course/CardTeacher';
 import { fetchUserById } from '../../redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 const HorizontalTeacher = ({ navigation, data }) => {
+    const dispatch = useDispatch()
     const handleGetTeacherDetails = async (userId) => {
         try {
             const result = await dispatch(fetchUserById(userId)).unwrap(); // Lấy dữ liệu trả về trực tiếp

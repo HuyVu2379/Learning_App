@@ -10,13 +10,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchTeachers } from '../redux/slices/userSlice';
 import { fetchAllCategory } from '../redux/slices/categorySlice';
 import { fetchPopularCourse, fetchInspiresCourse } from '../redux/slices/courseSlice';
+import { getCartByUser } from '../redux/slices/cartSlice';
 const HomePage = ({ navigation }) => {
     const dispatch = useDispatch();
     const { teachers, loadingTeacher, errorTeacher } = useSelector((state) => state.user);
     const { popularCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
     const { inspiresCourse } = useSelector((state) => state.course);
-
-
+    const { loggedInUser } = useSelector((state) => state.user)
+    const user = loggedInUser
+    const handleGetCartOfUser = async (userId) => {
+        try {
+            await dispatch(getCartByUser(userId))
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        handleGetCartOfUser(user.userId);
+    })
     const handleGetInpiresCourse = async () => {
         try {
             await dispatch(fetchInspiresCourse({ categoryId: 2, limit: 3 }));

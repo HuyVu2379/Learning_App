@@ -9,13 +9,15 @@ import {
 import { FontAwesome, Feather, FontAwesome6 } from '@expo/vector-icons';
 import CourseDetailNavigator from '../navigators/CourseDetailNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getCartByUser } from "../redux/slices/cartSlice"
+import { useEffect } from 'react';
 const CourseDetailPage = ({ navigation }) => {
-    const { courseDetail } = useSelector((state) => state.course);
+    const { courseDetail } = useSelector((state) => state.course)
     const course = courseDetail;
+    const { loggedInUser } = useSelector((state) => state.user)
+    const user = loggedInUser
 
-    // Nếu dữ liệu courseDetail chưa được tải, hiển thị vòng xoay chờ
     if (!course) {
         return (
             <SafeAreaView style={styles.centered}>

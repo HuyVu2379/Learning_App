@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
-import Course from './Course/Course';
 import VerticalCarousel from './HomePage/VertitcalCarousel';
-import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch
+import { useSelector, useDispatch } from 'react-redux';
 const UserProfilePage = ({ navigation }) => {
     const { loggedInUser } = useSelector((state) => state.user);
     const user = loggedInUser

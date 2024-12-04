@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome, AntDesign, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getCartByUser, addCourse } from "../../redux/slices/cartSlice"
 const teacherInfo = {
   name: 'Sara Weise',
   role: 'UI/UX Designer',
@@ -51,7 +52,6 @@ const similarCourses = [
 
 const CourseItem = ({ course }) => {
   const [isBookmarked, setIsBookMarked] = useState(false);
-
   const handleBookmarkPress = () => {
     setIsBookMarked(!isBookmarked);
   }
@@ -77,6 +77,22 @@ const CourseItem = ({ course }) => {
 };
 
 export default function CourseScreen() {
+  const { courseDetail } = useSelector((state) => state.course);
+  const { userCart } = useSelector((state) => state.cart)
+  const coursedetail = courseDetail;
+  const dispatch = useDispatch();
+  const handleAddToCart = async (cartId, courseId) => {
+    if (!cartId) {
+      alert('Cart is not loaded yet!');
+      return;
+    }
+    try {
+      await dispatch(addCourse({ cartId, courseId })).unwrap();
+      alert('Course added to cart successfully!');
+    } catch (error) {
+      alert('Failed to add course to cart: ' + error);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.teacherContainer}>
@@ -115,10 +131,10 @@ export default function CourseScreen() {
 
       <View style={styles.priceContainer}>
         <View>
-          <Text style={styles.priceText}>{teacherInfo.price}</Text>
-          <Text style={styles.discountText}>{teacherInfo.discount}</Text>
+          <Text style={styles.priceText}>{coursedetail.price}$</Text>
+          <Text style={styles.discountText}>{coursedetail.price}$</Text>
         </View>
-        <TouchableOpacity style={styles.addToCartButton}>
+        <TouchableOpacity onPress={() => { handleAddToCart(userCart.cartId, coursedetail.courseId) }} style={styles.addToCartButton}>
           <AntDesign name="shoppingcart" size={24} color="white" />
           <Text style={styles.addToCartText}>Add to cart</Text>
         </TouchableOpacity>

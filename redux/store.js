@@ -3,12 +3,14 @@ import userReducer from './slices/userSlice'; // Đường dẫn tới file user
 import categoryReducer from "./slices/categorySlice"
 import courseReducer from "./slices/courseSlice"
 import topicReducer from "./slices/topicSlice"
+import cartReducer from "./slices/cartSlice"
 export const store = configureStore({
     reducer: {
         user: userReducer,
         category: categoryReducer,
         course: courseReducer,
-        topic: topicReducer
+        topic: topicReducer,
+        cart: cartReducer
     },
 });
 

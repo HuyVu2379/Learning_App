@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Course from './Course/Course';
 import { CheckBox } from '@rneui/themed';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Button } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleGetAllCourseInCart } from "../redux/slices/cartSlice"
 function CartPage({ navigation }) {
+    const dispatch = useDispatch()
     const [isSelected, setSelection] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false); // Trạng thái modal
+    const { listCourse } = useSelector((state) => state.cart)
+    const { userCart } = useSelector((state) => state.cart)
+
+    const handleFetchAllCourse = async () => {
+        try {
+            await dispatch(handleGetAllCourseInCart(userCart.cartId))
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        handleFetchAllCourse();
+    }, [dispatch])
     const ItemCart = ({ data }) => {
         return (
             <View style={styles.courseBox}>
@@ -60,12 +76,25 @@ function CartPage({ navigation }) {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <AntDesign onPress={() => { navigation.goBack() }} name="arrowleft" size={24} color="black" />
-                <Text style={{ fontSize: 17 }}>Giỏ hàng(90)</Text>
+                <Text style={{ fontSize: 17 }}>
+                    Giỏ hàng ({listCourse?.[0]?.courses?.length || 0})
+                </Text>
+
                 <Entypo name="dots-three-vertical" size={24} color="black" />
             </View>
+
             <ScrollView style={styles.courseContainer}>
-                <ItemCart data={data} />
+                {Array.isArray(listCourse) && listCourse.length > 0
+                    ? listCourse.map((cartItem, index) =>
+                        cartItem.courses?.map((course, courseIndex) => (
+                            <ItemCart key={`${index}-${courseIndex}`} data={course} />
+                        ))
+                    )
+                    : <Text style={{ textAlign: 'center', marginTop: 20 }}>No courses in the cart.</Text>
+                }
             </ScrollView>
+
+
             <View style={styles.totalPriceBox}>
                 <Text style={styles.totalText}>Tổng cộng: 500,000 VND</Text>
                 <TouchableOpacity style={styles.checkoutButton}>
@@ -102,6 +131,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ecf0f1',
+        marginTop: 40
     },
     header: {
         flexDirection: 'row',
@@ -111,7 +141,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     courseContainer: {
-        flex: 1, // Chiếm toàn bộ không gian bên trên footer
+        flex: 1, // Chiếm toàn bộ không gian bên trên footer,
+        marginBottom: 70
     },
     checkBox: {
         alignItems: 'center',

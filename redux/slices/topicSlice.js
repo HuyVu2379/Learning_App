@@ -27,7 +27,7 @@ export const fetchCourseFilter = createAsyncThunk('topic/findCourseByTopic', asy
 });
 
 // Slice
-const courseSlice = createSlice({
+const topic = createSlice({
     name: 'topic',
     initialState,
     reducers: {
@@ -63,4 +63,4 @@ const courseSlice = createSlice({
             ;
     },
 });
-export default courseSlice.reducer;
+export default topic.reducer;
