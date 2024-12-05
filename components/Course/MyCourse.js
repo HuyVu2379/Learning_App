@@ -2,9 +2,9 @@ import React from 'react';
 import { ProgressBar } from 'react-native-paper';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-const MyCourse = ({ data = {} }) => {
-    const { id, imageUrl, title = "Course Title", duration = "N/A", actualProgress = 0 } = data;
-    const progress = Math.max(0, Math.min(actualProgress, 100)) / 100;
+const MyCourse = ({ data }) => {
+    const { courseId, nameCourse = "Course Title", duration = "N/A", progress = 0, imageUrl } = data || {}; // Lấy thông tin khóa học từ data
+    const progressValue = Math.max(0, Math.min(progress, 100)) / 100;
 
     return (
         <View style={styles.container}>
@@ -14,13 +14,11 @@ const MyCourse = ({ data = {} }) => {
                 <View style={styles.placeholderImage} />
             )}
             <View style={styles.content}>
-                <View>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.duration}>{duration}</Text>
-                </View>
+                <Text style={styles.title}>{nameCourse}</Text>
+                <Text style={styles.duration}>{duration}</Text>
                 <View style={styles.progress}>
-                    <Text style={styles.actualProgress}>{actualProgress}% Complete</Text>
-                    <ProgressBar progress={progress} color="#00BDD6" style={styles.progressBar} />
+                    <Text style={styles.actualProgress}>{progress}% Complete</Text>
+                    <ProgressBar progress={progressValue} color="#00BDD6" style={styles.progressBar} />
                 </View>
             </View>
         </View>

@@ -7,7 +7,6 @@ const MyCoursePage = () => {
     const data = {
         titleBanner: "Courses that boost your career!",
     };
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bannerContainer}>

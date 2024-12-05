@@ -8,15 +8,17 @@ const AllCourses = ({ navigation }) => {
     const dispatch = useDispatch();
     const { myCourse, loadingCourse, errorCourse } = useSelector((state) => state.course);
     const { loggedInUser } = useSelector((state) => state.user)
+
     useEffect(() => {
         dispatch(fetchMyCourses(loggedInUser.userId));
     }, [dispatch]);
 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate('CourseDetail')} style={styles.itemContainer}>
-            <MyCourse data={item} />
+            <MyCourse data={item.course} />
         </TouchableOpacity>
     );
+
 
     if (loadingCourse) {
         return <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center' }} />;

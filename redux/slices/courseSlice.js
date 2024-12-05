@@ -70,7 +70,6 @@ export const handleRegisterCourse = createAsyncThunk('course/registerCourse', as
 export const fetchMyCourses = createAsyncThunk('course/getMyCourses', async (userId, { rejectWithValue }) => {
     try {
         console.log("userId from courseSlice: ", userId);
-
         const response = await getMyCourses(userId);
         return response;
     } catch (error) {
